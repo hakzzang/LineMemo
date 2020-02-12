@@ -41,11 +41,11 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     //room
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
