@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="@dimen/todo_gallery_size"
         android:layout_height="@dimen/todo_gallery_size"
-        android:onClick="@{()->memoMakeViewModel.goGallery()}"
+        android:onClick="@{()->memoMakeViewModel.showSelectionThumbnailDialog()}"
         android:orientation="vertical"
         android:src="@drawable/ic_add_circle_black_24dp"/>
 </layout>

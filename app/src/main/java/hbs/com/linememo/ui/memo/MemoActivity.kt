@@ -32,9 +32,9 @@ class MemoActivity : AppCompatActivity() {
         val binding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
+        initToolbar(binding)
         initViewModel()
         initView(binding)
-        initToolbar(binding)
     }
 
     private fun initViewModel() {

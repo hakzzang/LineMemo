@@ -2,10 +2,9 @@ package hbs.com.linememo.ui.memo_make
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import hbs.com.linememo.R
@@ -35,19 +34,21 @@ class MemoMakeActivity : AppCompatActivity() {
                 this,
                 R.layout.activity_make_memo
             )
-
+        initToolbar(binding)
         initViewModel()
         initView(binding)
-        initToolbar(binding)
+
     }
 
     private fun initViewModel() {
         memoMakeViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoMakeViewModel::class.java)
 
-        memoMakeViewModel.galleryStatus.observe(this, Observer {
-            Toast.makeText(this, "클릭함 ㅋㅋ", Toast.LENGTH_SHORT).show()
-        })
+        memoMakeViewModel.navigator = object : MemoMakeNavigator {
+            override fun clickSelectionThumbnailDialog() {
+                showSelectionThumbnailDialog()
+            }
+        }
     }
 
     private fun initView(binding: ActivityMakeMemoBinding) {
@@ -72,5 +73,15 @@ class MemoMakeActivity : AppCompatActivity() {
     private fun initToolbar(binding: ActivityMakeMemoBinding) {
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = "메모 등록"
+    }
+
+    private fun showSelectionThumbnailDialog(){
+        AlertDialog
+            .Builder(this@MemoMakeActivity)
+            .setTitle(R.string.thumbnail_selection_title)
+            .setItems(R.array.thumbnail_selection_items)
+            { dialogInterface, position ->
+
+            }.show()
     }
 }
