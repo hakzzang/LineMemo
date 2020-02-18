@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="memoMakeViewModel"
+            type="hbs.com.linememo.ui.memo_make.MemoMakeViewModel" />
+    </data>
+
+    <ImageView
+        android:layout_width="@dimen/todo_gallery_size"
+        android:layout_height="@dimen/todo_gallery_size"
+        android:onClick="@{()->memoMakeViewModel.goGallery()}"
+        android:orientation="vertical"
+        android:src="@drawable/ic_add_circle_black_24dp"/>
+</layout>

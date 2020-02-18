@@ -7,7 +7,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
 import hbs.com.linememo.domain.local.repository.MemoRepository
+import hbs.com.linememo.domain.local.usecase.MemoUseCase
 import hbs.com.linememo.ui.memo.MemoViewModel
+import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
 import javax.inject.Provider
 import kotlin.reflect.KClass
 
@@ -20,8 +22,15 @@ class ViewModelModule{
     @Provides
     @IntoMap
     @ViewModelKey(MemoViewModel::class)
-    fun getMemoViewModel(memoRepository: MemoRepository): ViewModel {
-        return MemoViewModel(memoRepository)
+    fun getMemoViewModel(memoUseCase: MemoUseCase): ViewModel {
+        return MemoViewModel(memoUseCase)
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(MemoMakeViewModel::class)
+    fun getMemoMakeViewModel(): ViewModel {
+        return MemoMakeViewModel()
     }
 
     @Provides

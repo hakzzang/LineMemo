@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LineMemo</string>
+    <string name="make_memo_title_hint">제목</string>
+    <string name="make_memo_content_hint">내용</string>
 </resources>

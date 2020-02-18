@@ -4,10 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class MemoItem(
+data class MemoGallery(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val title: String,
-    val content: String,
-    val thumbnail: String,
-    val thumbnailType : String
+    val filePath: String,
+    val urlType:String
 )

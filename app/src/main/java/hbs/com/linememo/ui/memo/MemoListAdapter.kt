@@ -24,5 +24,4 @@ val memoListAsyncListUtil = object : DiffUtil.ItemCallback<MemoItem>() {
     override fun areContentsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
         return oldItem == newItem
     }
-
 }

@@ -1,5 +1,6 @@
 package hbs.com.linememo.ui.memo
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -7,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMainBinding
-import hbs.com.linememo.di.DaggerActivityComponent
-import hbs.com.linememo.di.ViewModelFactory
+import hbs.com.linememo.di.*
+import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -21,11 +22,19 @@ class MemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
+            .activityModule(ActivityModule(this))
+            .domainModule(DomainModule())
+            .utilityModule(UtilityModule())
+            .viewModelModule(ViewModelModule())
             .build()
+            .inject(this)
+
         val binding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
         initViewModel()
         initView(binding)
+        initToolbar(binding)
     }
 
     private fun initViewModel() {
@@ -40,6 +49,13 @@ class MemoActivity : AppCompatActivity() {
             memoViewModel.findAllMemo().subscribe {
                 memoListAdapter.submitList(it)
             })
+        binding.fabAddMemo.setOnClickListener {
+            startActivity(Intent(this, MemoMakeActivity::class.java))
+        }
+    }
 
+    private fun initToolbar(binding: ActivityMainBinding){
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = "메모 리스트"
     }
 }
