@@ -6,8 +6,10 @@ import androidx.room.PrimaryKey
 @Entity
 data class MemoItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val title: String,
-    val content: String,
-    val thumbnail: String,
-    val thumbnailType : String
-)
+    var title: String,
+    var content: String,
+    var thumbnail: String,
+    var thumbnailType: String
+) {
+    constructor() : this(0, "", "", "", "")
+}

@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMainBinding
 import hbs.com.linememo.di.*
+import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class MemoActivity : AppCompatActivity() {
+class MemoActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoViewModel: MemoViewModel
@@ -32,7 +33,7 @@ class MemoActivity : AppCompatActivity() {
         val binding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
-        initToolbar(binding)
+        initToolbar(binding.toolbar, "메모 리스트")
         initViewModel()
         initView(binding)
     }
@@ -52,10 +53,5 @@ class MemoActivity : AppCompatActivity() {
         binding.fabAddMemo.setOnClickListener {
             startActivity(Intent(this, MemoMakeActivity::class.java))
         }
-    }
-
-    private fun initToolbar(binding: ActivityMainBinding){
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = "메모 리스트"
     }
 }

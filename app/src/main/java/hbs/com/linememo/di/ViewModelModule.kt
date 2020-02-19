@@ -29,8 +29,8 @@ class ViewModelModule{
     @Provides
     @IntoMap
     @ViewModelKey(MemoMakeViewModel::class)
-    fun getMemoMakeViewModel(): ViewModel {
-        return MemoMakeViewModel()
+    fun getMemoMakeViewModel(memoUseCase: MemoUseCase): ViewModel {
+        return MemoMakeViewModel(memoUseCase)
     }
 
     @Provides

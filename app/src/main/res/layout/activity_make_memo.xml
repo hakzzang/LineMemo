@@ -36,6 +36,7 @@
                 android:id="@+id/et_memo_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:text="@={memoItem.title}"
                 android:hint="@string/make_memo_title_hint" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -55,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="top"
+                android:text="@={memoItem.content}"
                 android:hint="@string/make_memo_content_hint" />
         </com.google.android.material.textfield.TextInputLayout>
 

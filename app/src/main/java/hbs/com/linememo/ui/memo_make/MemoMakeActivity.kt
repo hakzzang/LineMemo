@@ -1,9 +1,11 @@
 package hbs.com.linememo.ui.memo_make
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,9 +13,11 @@ import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
 import hbs.com.linememo.domain.model.WrapMemoGallery
+import hbs.com.linememo.ui.core.BaseActivity
 import javax.inject.Inject
 
-class MemoMakeActivity : AppCompatActivity() {
+
+class MemoMakeActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoMakeViewModel: MemoMakeViewModel
@@ -34,7 +38,7 @@ class MemoMakeActivity : AppCompatActivity() {
                 this,
                 R.layout.activity_make_memo
             )
-        initToolbar(binding)
+        initToolbar(binding.toolbar, "메모 등록")
         initViewModel()
         initView(binding)
 
@@ -52,30 +56,17 @@ class MemoMakeActivity : AppCompatActivity() {
     }
 
     private fun initView(binding: ActivityMakeMemoBinding) {
+        binding.lifecycleOwner = this
         binding.rvMemoGallery.adapter = MemoMakeGalleryAdapter(memoMakeViewModel).apply {
             val list = mutableListOf<WrapMemoGallery>()
             list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
             this.submitList(list)
         }
         binding.rvMemoGallery.layoutManager = LinearLayoutManager(this)
+        binding.memoItem = memoMakeViewModel.memoItem.value
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun initToolbar(binding: ActivityMakeMemoBinding) {
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = "메모 등록"
-    }
-
-    private fun showSelectionThumbnailDialog(){
+    private fun showSelectionThumbnailDialog() {
         AlertDialog
             .Builder(this@MemoMakeActivity)
             .setTitle(R.string.thumbnail_selection_title)
@@ -83,5 +74,26 @@ class MemoMakeActivity : AppCompatActivity() {
             { dialogInterface, position ->
 
             }.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_save_todo-> {
+                Log.d("isEmpty",memoMakeViewModel.memoItem.value?.toString())
+                memoMakeViewModel.memoItem.value?.run {
+                    Toast.makeText(this@MemoMakeActivity, this.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+//                memoMakeViewModel.memoItem.value?.run {
+//                    memoMakeViewModel.saveMemo(this)
+//                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
