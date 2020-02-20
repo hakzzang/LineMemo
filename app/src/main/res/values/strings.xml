@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">LineMemo</string>
+    <string name="empty_text"> </string>
+    <!-- Memo List-->
+    <string name="memo_title_empty">제목 없음</string>
+    <string name="memo_content_empty">내용 없음</string>
+    <!-- Make Memo-->
     <string name="make_memo_title_hint">제목</string>
     <string name="make_memo_content_hint">내용</string>
-
     <string name="thumbnail_selection_title">사진 선택</string>
     <string name="all_save_text">저장</string>
     <string-array name="thumbnail_selection_items">

@@ -16,4 +16,9 @@ class MemoRepository(private val memoDataBase: MemoDataBase) {
         .fromCallable { memoDataBase.getMemoItemDao().insert(memoItem) }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
+
+    fun updateMemo(memoItem: MemoItem) = Observable
+        .fromCallable { memoDataBase.getMemoItemDao().update(memoItem) }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 }

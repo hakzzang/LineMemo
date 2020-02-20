@@ -6,4 +6,5 @@ import hbs.com.linememo.domain.model.MemoItem
 class MemoUseCase(private val memoRepository: MemoRepository){
     fun findAllMemo() = memoRepository.findAllMemo()
     fun insertMemo(memoItem: MemoItem) = memoRepository.insert(memoItem)
+    fun updateMemo(memoItem: MemoItem) = memoRepository.updateMemo(memoItem)
 }

@@ -10,12 +10,12 @@ import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMainBinding
 
 abstract class BaseActivity : AppCompatActivity(){
-    fun initToolbar(toolbar: Toolbar, title:String) {
+    fun initToolbar(toolbar: Toolbar, title:String, isUseHomeButton:Boolean = false) {
         setSupportActionBar(toolbar)
         with(supportActionBar) {
             this?.title = title
-            this?.setDisplayShowHomeEnabled(true)
-            this?.setDisplayHomeAsUpEnabled(true)
+            this?.setDisplayShowHomeEnabled(isUseHomeButton)
+            this?.setDisplayHomeAsUpEnabled(isUseHomeButton)
         }
     }
 
