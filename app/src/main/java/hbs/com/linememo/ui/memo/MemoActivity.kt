@@ -13,6 +13,7 @@ import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import javax.inject.Inject
 
 class MemoActivity : BaseActivity() {
@@ -85,7 +86,8 @@ class MemoActivity : BaseActivity() {
     private fun findAndNotifyAllMemo(){
         compositeDisposable.add(
             memoViewModel.findAllMemo().subscribe {
-                memoListAdapter.submitList(it)
+                val sortedList =it.sortedByDescending { it.makeAt.time }
+                memoListAdapter.submitList(sortedList)
             })
     }
 }

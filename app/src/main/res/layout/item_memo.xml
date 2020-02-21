@@ -40,6 +40,7 @@
             android:textSize="@dimen/material_text_headline"
             android:textStyle="bold"
             android:textColor="#000000"
+            android:textAlignment="center"
             android:text="@{TextUtils.isEmpty(memoItem.title)?@string/empty_text:TextUtils.substring(memoItem.title,0,1)}"
             android:visibility="@{TextUtils.isEmpty(memoItem.thumbnail)?View.VISIBLE:View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"

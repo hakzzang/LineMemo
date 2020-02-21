@@ -14,7 +14,7 @@ data class MemoItem(
     var content: String,
     var thumbnail: String,
     var thumbnailType: String,
-    val makeAt: Date = Date()
+    var makeAt: Date = Date()
 ) : Parcelable {
     constructor() : this(0, "", "", "", "")
 }

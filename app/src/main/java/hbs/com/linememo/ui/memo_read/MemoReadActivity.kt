@@ -15,9 +15,10 @@ import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.memo_make.MemoGalleryViewType
 import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
-import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
+import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.util.ResourceKeys
+import java.util.*
 import javax.inject.Inject
 
 class MemoReadActivity : BaseActivity() {
@@ -41,8 +42,6 @@ class MemoReadActivity : BaseActivity() {
         initToolbar(binding.toolbar, "메모 수정", true)
         initViewModel()
         initView(binding)
-
-
     }
 
     private fun initViewModel() {
@@ -89,7 +88,7 @@ class MemoReadActivity : BaseActivity() {
         when (item.itemId) {
             R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
-                    memoMakeViewModel.updateMemo(this).subscribe {
+                    memoMakeViewModel.updateMemo(updateDateAt(this)).subscribe {
                         setResult(ResourceKeys.COMPLETED)
                         finish()
                     }
@@ -97,5 +96,11 @@ class MemoReadActivity : BaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun updateDateAt(memoItem: MemoItem): MemoItem {
+        return memoItem.apply {
+            this.makeAt = Date()
+        }
     }
 }
