@@ -1,10 +1,12 @@
 package hbs.com.linememo.ui.memo_make
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import hbs.com.linememo.databinding.ItemMemoAddGalleryBinding
 import hbs.com.linememo.databinding.ItemMemoGalleryBinding
 import hbs.com.linememo.domain.model.WrapMemoGallery
@@ -34,20 +36,21 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MemoGalleryViewHolder) {
-            holder.bind()
+            holder.bind(getItem(position))
         } else if (holder is MemoAddGalleryViewHolder) {
             holder.bind(memoMakeViewModel)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
+        return getItem(position).viewType.type
     }
 
     inner class MemoGalleryViewHolder(val binding: ItemMemoGalleryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-
+        fun bind(item: WrapMemoGallery) {
+            val thumbnailPath = item.memoGallery?.filePath
+            Glide.with(binding.ivThumbnailItem).load(thumbnailPath).into(binding.ivThumbnailItem)
         }
     }
 

@@ -7,6 +7,7 @@
     </data>
 
     <ImageView
+        android:id="@+id/iv_thumbnail_item"
         android:layout_width="@dimen/todo_gallery_size"
         android:layout_height="@dimen/todo_gallery_size"
         android:orientation="vertical"

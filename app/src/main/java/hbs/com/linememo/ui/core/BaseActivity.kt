@@ -5,10 +5,8 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -26,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 interface DataSender {
-    fun sendImage(bitmap: Bitmap)
+    fun sendImage(imageUri: String)
 }
 
 abstract class BaseActivity : AppCompatActivity(){
@@ -54,12 +52,10 @@ abstract class BaseActivity : AppCompatActivity(){
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === ResourceKeys.TAKE_CAMERA
-            && resultCode === Activity.RESULT_OK
+        if (requestCode === ResourceKeys.TAKE_CAMERA && resultCode === Activity.RESULT_OK
         ) {
-            val extras: Bundle = data?.extras ?: return
-            val imageBitmap = extras["data"] as Bitmap
-            dataSender.sendImage(imageBitmap)
+            Log.d("currentPhotoPath", currentPhotoPath)
+            dataSender.sendImage(currentPhotoPath)
         }
     }
 
@@ -127,22 +123,19 @@ abstract class BaseActivity : AppCompatActivity(){
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
-                    // Error occurred while creating the File
                     null
                 }
-                // Continue only if the File was successfully created
+
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         this,
                         "hbs.com.linememo.provider",
                         it
                     )
-                    takePictureIntent.putExtra(MediaStore.ACTION_IMAGE_CAPTURE, photoURI)
-                    Log.d("pcitureUri", photoURI.toString())
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, ResourceKeys.TAKE_CAMERA)
                 }
             }
@@ -155,15 +148,15 @@ abstract class BaseActivity : AppCompatActivity(){
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val isExistDir = storageDir?.exists() ?: false
-        if (isExistDir) {
+        if (!isExistDir) {
             storageDir?.mkdirs()
         }
+        Log.d("storageDir", storageDir?.path)
         return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
         }
     }

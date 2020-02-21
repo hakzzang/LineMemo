@@ -1,17 +1,17 @@
 package hbs.com.linememo.ui.memo_make
 
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
+import hbs.com.linememo.domain.model.MemoGallery
 import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
@@ -23,7 +23,7 @@ class MemoMakeActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoMakeViewModel: MemoMakeViewModel
-
+    lateinit var memoMakeAdapter: MemoMakeGalleryAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -43,9 +43,16 @@ class MemoMakeActivity : BaseActivity() {
         initViewModel()
         initView(binding)
 
-        dataSender = object : DataSender{
-            override fun sendImage(bitmap: Bitmap) {
-                Log.d("make bitmap:",bitmap.width.toString())
+        dataSender = object : DataSender {
+            override fun sendImage(imageUri: String) {
+                val list = mutableListOf<WrapMemoGallery>()
+                list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
+                val wrapMemoGallery = WrapMemoGallery(
+                    MemoGallery(0, imageUri, "CAMERA"),
+                    MemoGalleryViewType.PICTURE
+                )
+                list.add(wrapMemoGallery)
+                memoMakeAdapter.submitList(list)
             }
         }
     }
@@ -63,12 +70,14 @@ class MemoMakeActivity : BaseActivity() {
 
     private fun initView(binding: ActivityMakeMemoBinding) {
         binding.lifecycleOwner = this
-        binding.rvMemoGallery.adapter = MemoMakeGalleryAdapter(memoMakeViewModel).apply {
+        memoMakeAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
+        binding.rvMemoGallery.adapter = memoMakeAdapter.apply {
             val list = mutableListOf<WrapMemoGallery>()
             list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
             this.submitList(list)
         }
-        binding.rvMemoGallery.layoutManager = LinearLayoutManager(this)
+        binding.rvMemoGallery.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.memoItem = memoMakeViewModel.memoItem.value
     }
 
@@ -79,9 +88,15 @@ class MemoMakeActivity : BaseActivity() {
             .setItems(R.array.thumbnail_selection_items)
             { dialogInterface, position ->
                 if (position == 0) {
-                    checkPermissions(ResourceKeys.CAMERA_PERMISSIONS, ResourceKeys.CAMERA_PERMISSION_CODE)
+                    checkPermissions(
+                        ResourceKeys.CAMERA_PERMISSIONS,
+                        ResourceKeys.CAMERA_PERMISSION_CODE
+                    )
                 } else if (position == 1) {
-                    checkPermissions(ResourceKeys.STORAGE_PERMISSIONS, ResourceKeys.STORAGE_PERMISSION_CODE)
+                    checkPermissions(
+                        ResourceKeys.STORAGE_PERMISSIONS,
+                        ResourceKeys.STORAGE_PERMISSION_CODE
+                    )
                 }
             }.show()
     }
@@ -93,7 +108,7 @@ class MemoMakeActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_save_todo-> {
+            R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
                     memoMakeViewModel.saveMemo(this).subscribe {
                         setResult(ResourceKeys.COMPLETED)
