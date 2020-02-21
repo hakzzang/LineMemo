@@ -6,11 +6,15 @@
 
     </data>
 
-    <ImageView
-        android:id="@+id/iv_thumbnail_item"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/todo_gallery_size"
-        android:layout_height="@dimen/todo_gallery_size"
-        android:orientation="vertical"
-        tools:src="@mipmap/ic_launcher"
-        />
+        android:layout_height="@dimen/todo_gallery_size">
+        <ImageView
+            android:id="@+id/iv_thumbnail_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:adjustViewBounds="true"
+            tools:src="@mipmap/ic_launcher" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

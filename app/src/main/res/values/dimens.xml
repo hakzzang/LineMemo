@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="todo_gallery_size">56dp</dimen>
+    <dimen name="todo_gallery_size">72dp</dimen>
     <dimen name="material_text_caption">12sp</dimen>
     <dimen name="material_text_body1">14sp</dimen>
     <dimen name="material_text_body2">13sp</dimen>
