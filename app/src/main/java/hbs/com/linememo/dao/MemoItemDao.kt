@@ -9,7 +9,7 @@ interface MemoItemDao{
     fun findAllItems(): List<MemoItem>
 
     @Insert
-    fun insert(memoItem: MemoItem)
+    fun insert(memoItem: MemoItem) : Long
 
     @Update
     fun update(memoItem: MemoItem)

@@ -3,17 +3,16 @@ package hbs.com.linememo.ui.memo_read
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityReadMemoBinding
 import hbs.com.linememo.di.*
 import hbs.com.linememo.domain.model.MemoItem
-import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
-import hbs.com.linememo.ui.memo_make.MemoGalleryViewType
+import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
 import hbs.com.linememo.ui.memo_make.MemoNavigator
@@ -25,6 +24,7 @@ class MemoReadActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoMakeViewModel: MemoMakeViewModel
+    lateinit var memoMakeGalleryAdapter: MemoMakeGalleryAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -42,6 +42,12 @@ class MemoReadActivity : BaseActivity() {
         initToolbar(binding.toolbar, "메모 수정", true)
         initViewModel()
         initView(binding)
+
+        dataSender = object : DataSender {
+            override fun sendImage(imageUri: String) {
+                memoMakeGalleryAdapter.addItem(imageUri)
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -57,26 +63,15 @@ class MemoReadActivity : BaseActivity() {
 
     private fun initView(binding: ActivityReadMemoBinding) {
         binding.lifecycleOwner = this
-        binding.rvMemoGallery.adapter = MemoMakeGalleryAdapter(memoMakeViewModel).apply {
-            val list = mutableListOf<WrapMemoGallery>()
-            list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
-            this.submitList(list)
-        }
-        binding.rvMemoGallery.layoutManager = LinearLayoutManager(this)
-
+        memoMakeGalleryAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
+        binding.rvMemoGallery.adapter = memoMakeGalleryAdapter
+        binding.rvMemoGallery.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        compositeDisposable.add(memoMakeViewModel.selectMemoGalleries().subscribe { memoGalleries ->
+            memoMakeGalleryAdapter.initItems(memoGalleries)
+        })
         val memoItem = intent.getParcelableExtra<MemoItem>(ResourceKeys.MEMO_ITEM_KEY) ?: return
         memoMakeViewModel.inputMemo(memoItem)
         binding.memoItem = memoMakeViewModel.memoItem.value
-    }
-
-    private fun showSelectionThumbnailDialog() {
-        AlertDialog
-            .Builder(this@MemoReadActivity)
-            .setTitle(R.string.thumbnail_selection_title)
-            .setItems(R.array.thumbnail_selection_items)
-            { dialogInterface, position ->
-
-            }.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

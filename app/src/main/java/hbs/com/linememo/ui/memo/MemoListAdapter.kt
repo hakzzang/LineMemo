@@ -13,6 +13,10 @@ import hbs.com.linememo.ui.memo_read.MemoReadActivity
 import hbs.com.linememo.util.ResourceKeys
 
 class MemoListAdapter(private val memoViewModel: MemoViewModel) : ListAdapter<MemoItem, RecyclerView.ViewHolder>(memoListAsyncListUtil){
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MemoItemViewHolder(
             ItemMemoBinding.inflate(

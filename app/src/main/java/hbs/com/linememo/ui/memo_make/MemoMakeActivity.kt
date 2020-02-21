@@ -1,9 +1,9 @@
 package hbs.com.linememo.ui.memo_make
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +21,7 @@ class MemoMakeActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoMakeViewModel: MemoMakeViewModel
-    lateinit var memoMakeAdapter: MemoMakeGalleryAdapter
+    lateinit var memoMakeGalleryAdapter: MemoMakeGalleryAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -43,7 +43,7 @@ class MemoMakeActivity : BaseActivity() {
 
         dataSender = object : DataSender {
             override fun sendImage(imageUri: String) {
-                memoMakeAdapter.addItem(imageUri)
+                memoMakeGalleryAdapter.addItem(imageUri)
             }
         }
     }
@@ -61,33 +61,13 @@ class MemoMakeActivity : BaseActivity() {
 
     private fun initView(binding: ActivityMakeMemoBinding) {
         binding.lifecycleOwner = this
-        memoMakeAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
-        binding.rvMemoGallery.adapter = memoMakeAdapter.apply {
-            memoMakeAdapter.initItems()
+        memoMakeGalleryAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
+        binding.rvMemoGallery.adapter = memoMakeGalleryAdapter.apply {
+            initItems()
         }
         binding.rvMemoGallery.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.memoItem = memoMakeViewModel.memoItem.value
-    }
-
-    private fun showSelectionThumbnailDialog() {
-        AlertDialog
-            .Builder(this@MemoMakeActivity)
-            .setTitle(R.string.thumbnail_selection_title)
-            .setItems(R.array.thumbnail_selection_items)
-            { dialogInterface, position ->
-                if (position == 0) {
-                    checkPermissions(
-                        ResourceKeys.CAMERA_PERMISSIONS,
-                        ResourceKeys.CAMERA_PERMISSION_CODE
-                    )
-                } else if (position == 1) {
-                    checkPermissions(
-                        ResourceKeys.STORAGE_PERMISSIONS,
-                        ResourceKeys.STORAGE_PERMISSION_CODE
-                    )
-                }
-            }.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -99,10 +79,16 @@ class MemoMakeActivity : BaseActivity() {
         when (item.itemId) {
             R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
-                    memoMakeViewModel.saveMemo(this).subscribe {
-                        setResult(ResourceKeys.COMPLETED)
-                        finish()
-                    }
+                    compositeDisposable.add(memoMakeViewModel.insertMemo(this)
+                        .flatMap { memoId ->
+                            memoMakeViewModel.insertMemoGalleries(memoId, memoMakeGalleryAdapter.currentList)
+                        }.subscribe({
+                            setResult(ResourceKeys.COMPLETED)
+                            finish()
+                        }, {
+                            Log.d("errorrr,", it.message)
+                        })
+                    )
                 }
             }
         }

@@ -18,6 +18,9 @@ enum class MemoGalleryViewType constructor(val type:Int) {
 
 class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
     ListAdapter<WrapMemoGallery, RecyclerView.ViewHolder>(memoGalleryListAsyncListUtil) {
+    init {
+        setHasStableIds(true)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == MemoGalleryViewType.ADD.type) {
             val binding =
@@ -47,6 +50,10 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
         return getItem(position).viewType.type
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     inner class MemoGalleryViewHolder(val binding: ItemMemoGalleryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WrapMemoGallery, position: Int) {
@@ -73,15 +80,32 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
         newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
         submitList(newList)
     }
+    fun initItems(memoGalleries:List<MemoGallery>){
+        val newList = mutableListOf<WrapMemoGallery>()
+        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
+        for(memoGallery in memoGalleries){
+            newList.add(WrapMemoGallery(memoGallery, MemoGalleryViewType.PICTURE))
+        }
+        submitList(newList)
+    }
 
     fun addItem(imageUri:String){
         val newList = mutableListOf<WrapMemoGallery>()
-        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
+        newList.addAll(currentList)
         val wrapMemoGallery = WrapMemoGallery(
-            MemoGallery(0, imageUri, "CAMERA"),
+            MemoGallery(0, imageUri, 0),
             MemoGalleryViewType.PICTURE
         )
         newList.add(wrapMemoGallery)
+        submitList(newList)
+    }
+
+    fun addItems(memoGalleries: List<MemoGallery>){
+        val newList = mutableListOf<WrapMemoGallery>()
+        newList.addAll(currentList)
+        for(memoGallery in memoGalleries){
+            newList.add(WrapMemoGallery(memoGallery, MemoGalleryViewType.PICTURE))
+        }
         submitList(newList)
     }
 

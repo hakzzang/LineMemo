@@ -12,13 +12,14 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import hbs.com.linememo.R
 import hbs.com.linememo.util.ResourceKeys
+import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -28,11 +29,17 @@ interface DataSender {
     fun sendImage(imageUri: String)
 }
 
-abstract class BaseActivity : AppCompatActivity(){
+abstract class BaseActivity : AppCompatActivity() {
     lateinit var dataSender: DataSender
     lateinit var currentPhotoPath: String
+    val compositeDisposable = CompositeDisposable()
 
-    fun initToolbar(toolbar: Toolbar, title:String, isUseHomeButton:Boolean = false) {
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
+    }
+
+    fun initToolbar(toolbar: Toolbar, title: String, isUseHomeButton: Boolean = false) {
         setSupportActionBar(toolbar)
         with(supportActionBar) {
             this?.title = title
@@ -163,6 +170,26 @@ abstract class BaseActivity : AppCompatActivity(){
         ).apply {
             currentPhotoPath = absolutePath
         }
+    }
+
+    fun showSelectionThumbnailDialog() {
+        AlertDialog
+            .Builder(this)
+            .setTitle(R.string.thumbnail_selection_title)
+            .setItems(R.array.thumbnail_selection_items)
+            { dialogInterface, position ->
+                if (position == 0) {
+                    checkPermissions(
+                        ResourceKeys.CAMERA_PERMISSIONS,
+                        ResourceKeys.CAMERA_PERMISSION_CODE
+                    )
+                } else if (position == 1) {
+                    checkPermissions(
+                        ResourceKeys.STORAGE_PERMISSIONS,
+                        ResourceKeys.STORAGE_PERMISSION_CODE
+                    )
+                }
+            }.show()
     }
 
     private fun notifyNewPictureForBroadcast() {

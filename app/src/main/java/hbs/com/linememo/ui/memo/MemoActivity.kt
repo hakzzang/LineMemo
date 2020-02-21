@@ -20,8 +20,8 @@ class MemoActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoViewModel: MemoViewModel
-    private val compositeDisposable = CompositeDisposable()
     lateinit var memoListAdapter : MemoListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -39,11 +39,6 @@ class MemoActivity : BaseActivity() {
         initViewModel()
         initView(binding)
         findAndNotifyAllMemo()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        compositeDisposable.clear()
     }
 
     private fun initViewModel() {
