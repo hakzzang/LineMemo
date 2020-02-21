@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import hbs.com.linememo.R
 import hbs.com.linememo.util.ResourceKeys
 import java.io.File
@@ -52,10 +53,12 @@ abstract class BaseActivity : AppCompatActivity(){
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === ResourceKeys.TAKE_CAMERA && resultCode === Activity.RESULT_OK
+        if (requestCode == ResourceKeys.TAKE_CAMERA && resultCode == Activity.RESULT_OK
         ) {
-            Log.d("currentPhotoPath", currentPhotoPath)
             dataSender.sendImage(currentPhotoPath)
+            notifyNewPictureForBroadcast()
+        } else if (requestCode == ResourceKeys.PICK_GALLERY && resultCode == Activity.RESULT_OK) {
+            data?.dataString?.let { dataSender.sendImage(it) }
         }
     }
 
@@ -104,7 +107,7 @@ abstract class BaseActivity : AppCompatActivity(){
                     grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[2] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    dispatchTakePictureIntent()
+                    takeCameraIntent()
                 }
             }
         } else if (requestCode == ResourceKeys.STORAGE_PERMISSION_CODE) {
@@ -112,6 +115,7 @@ abstract class BaseActivity : AppCompatActivity(){
                 grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                 grantResults[1] == PackageManager.PERMISSION_GRANTED
             ) {
+                pickGalleryIntent()
             }
         }
     }
@@ -120,7 +124,7 @@ abstract class BaseActivity : AppCompatActivity(){
         Toast.makeText(this, getString(toastStringRef), Toast.LENGTH_SHORT).show()
     }
 
-    private fun dispatchTakePictureIntent() {
+    private fun takeCameraIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
                 val photoFile: File? = try {
@@ -161,11 +165,17 @@ abstract class BaseActivity : AppCompatActivity(){
         }
     }
 
-    private fun galleryAddPic() {
+    private fun notifyNewPictureForBroadcast() {
         Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-            val f = File(currentPhotoPath)
-            mediaScanIntent.data = Uri.fromFile(f)
+            val newPhotoFile = File(currentPhotoPath)
+            mediaScanIntent.data = Uri.fromFile(newPhotoFile)
             sendBroadcast(mediaScanIntent)
         }
+    }
+
+    private fun pickGalleryIntent() {
+        val pictureActionIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(pictureActionIntent, ResourceKeys.PICK_GALLERY);
     }
 }

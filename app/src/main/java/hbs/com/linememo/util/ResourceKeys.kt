@@ -25,4 +25,5 @@ object ResourceKeys {
     )
 
     const val TAKE_CAMERA = 201
+    const val PICK_GALLERY = 202
 }
