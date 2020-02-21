@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
-import hbs.com.linememo.domain.model.MemoGallery
-import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.util.ResourceKeys
@@ -45,14 +43,7 @@ class MemoMakeActivity : BaseActivity() {
 
         dataSender = object : DataSender {
             override fun sendImage(imageUri: String) {
-                val list = mutableListOf<WrapMemoGallery>()
-                list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
-                val wrapMemoGallery = WrapMemoGallery(
-                    MemoGallery(0, imageUri, "CAMERA"),
-                    MemoGalleryViewType.PICTURE
-                )
-                list.add(wrapMemoGallery)
-                memoMakeAdapter.submitList(list)
+                memoMakeAdapter.addItem(imageUri)
             }
         }
     }
@@ -72,9 +63,7 @@ class MemoMakeActivity : BaseActivity() {
         binding.lifecycleOwner = this
         memoMakeAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
         binding.rvMemoGallery.adapter = memoMakeAdapter.apply {
-            val list = mutableListOf<WrapMemoGallery>()
-            list.add(WrapMemoGallery(MemoGalleryViewType.ADD))
-            this.submitList(list)
+            memoMakeAdapter.initItems()
         }
         binding.rvMemoGallery.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)

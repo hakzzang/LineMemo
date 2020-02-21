@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import hbs.com.linememo.databinding.ItemMemoAddGalleryBinding
 import hbs.com.linememo.databinding.ItemMemoGalleryBinding
+import hbs.com.linememo.domain.model.MemoGallery
 import hbs.com.linememo.domain.model.WrapMemoGallery
 
 enum class MemoGalleryViewType constructor(val type:Int) {
@@ -36,7 +37,7 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MemoGalleryViewHolder) {
-            holder.bind(getItem(position))
+            holder.bind(getItem(position), position)
         } else if (holder is MemoAddGalleryViewHolder) {
             holder.bind(memoMakeViewModel)
         }
@@ -48,10 +49,13 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
 
     inner class MemoGalleryViewHolder(val binding: ItemMemoGalleryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: WrapMemoGallery) {
-            val thumbnailPath = item.memoGallery?.filePath
+        fun bind(item: WrapMemoGallery, position: Int) {
+            binding.ivThumbnailRemove.setOnClickListener {
+                removeItem(position)
+            }
+
             Glide.with(binding.ivThumbnailItem)
-                .load(thumbnailPath)
+                .load(item.memoGallery?.filePath)
                 .apply(RequestOptions.centerCropTransform().override(binding.ivThumbnailItem.width, binding.ivThumbnailItem.height))
                 .into(binding.ivThumbnailItem)
         }
@@ -62,6 +66,31 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
         fun bind(memoMakeViewModel:MemoMakeViewModel) {
             binding.memoMakeViewModel = memoMakeViewModel
         }
+    }
+
+    fun initItems(){
+        val newList = mutableListOf<WrapMemoGallery>()
+        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
+        submitList(newList)
+    }
+
+    fun addItem(imageUri:String){
+        val newList = mutableListOf<WrapMemoGallery>()
+        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
+        val wrapMemoGallery = WrapMemoGallery(
+            MemoGallery(0, imageUri, "CAMERA"),
+            MemoGalleryViewType.PICTURE
+        )
+        newList.add(wrapMemoGallery)
+        submitList(newList)
+    }
+
+    fun removeItem(position: Int){
+        val oldList = currentList
+        val newList = mutableListOf<WrapMemoGallery>()
+        newList.addAll(oldList)
+        newList.removeAt(position)
+        submitList(newList)
     }
 }
 

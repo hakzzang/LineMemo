@@ -5,11 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hbs.com.linememo.domain.local.usecase.MemoUseCase
 import hbs.com.linememo.domain.model.MemoItem
+import java.text.FieldPosition
 import javax.inject.Inject
-
-enum class GalleryStatus {
-    GALLERY, CAMERA, INTERNET
-}
 
 class MemoMakeViewModel @Inject constructor(val memoUseCase: MemoUseCase) : ViewModel() {
     lateinit var navigator:MemoNavigator
@@ -27,4 +24,5 @@ class MemoMakeViewModel @Inject constructor(val memoUseCase: MemoUseCase) : View
     fun inputMemo(memoItem: MemoItem) = _memoItem.setValue(memoItem)
     fun saveMemo(memoItem: MemoItem) = memoUseCase.insertMemo(memoItem)
     fun updateMemo(memoItem: MemoItem) = memoUseCase.updateMemo(memoItem)
+
 }
