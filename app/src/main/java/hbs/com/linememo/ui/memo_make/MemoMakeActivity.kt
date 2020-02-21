@@ -1,6 +1,8 @@
 package hbs.com.linememo.ui.memo_make
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -12,6 +14,7 @@ import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
 import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
+import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.util.ResourceKeys
 import javax.inject.Inject
 
@@ -39,6 +42,12 @@ class MemoMakeActivity : BaseActivity() {
         initToolbar(binding.toolbar, "메모 등록", true)
         initViewModel()
         initView(binding)
+
+        dataSender = object : DataSender{
+            override fun sendImage(bitmap: Bitmap) {
+                Log.d("make bitmap:",bitmap.width.toString())
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -69,7 +78,11 @@ class MemoMakeActivity : BaseActivity() {
             .setTitle(R.string.thumbnail_selection_title)
             .setItems(R.array.thumbnail_selection_items)
             { dialogInterface, position ->
-
+                if (position == 0) {
+                    checkPermissions(ResourceKeys.CAMERA_PERMISSIONS, ResourceKeys.CAMERA_PERMISSION_CODE)
+                } else if (position == 1) {
+                    checkPermissions(ResourceKeys.STORAGE_PERMISSIONS, ResourceKeys.STORAGE_PERMISSION_CODE)
+                }
             }.show()
     }
 

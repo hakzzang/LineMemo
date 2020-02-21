@@ -9,6 +9,7 @@
     <string name="make_memo_content_hint">내용</string>
     <string name="thumbnail_selection_title">사진 선택</string>
     <string name="all_save_text">저장</string>
+    <string name="all_text_not_permission">해당 기능을 사용하시려면, 퍼미션 권한이 필요합니다.</string>
     <string-array name="thumbnail_selection_items">
         <item>카메라</item>
         <item>갤러리</item>
