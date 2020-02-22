@@ -19,4 +19,7 @@ interface MemoGalleryDao {
 
     @Delete
     fun delete(memoGallery: MemoGallery)
+
+    @Query("DELETE FROM MemoGallery WHERE memo_id =:memoId")
+    fun removeItemAt(memoId:Int)
 }

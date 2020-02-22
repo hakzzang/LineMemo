@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="memoItem"
             type="hbs.com.linememo.domain.model.MemoItem" />
 
         <import type="android.view.View" />
-
         <import type="android.text.TextUtils" />
     </data>
 

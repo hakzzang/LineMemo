@@ -1,7 +1,6 @@
 package hbs.com.linememo.ui.memo
 
 import android.content.Intent
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -13,10 +12,6 @@ import hbs.com.linememo.ui.memo_read.MemoReadActivity
 import hbs.com.linememo.util.ResourceKeys
 
 class MemoListAdapter(private val memoViewModel: MemoViewModel) : ListAdapter<MemoItem, RecyclerView.ViewHolder>(memoListAsyncListUtil){
-    init {
-        setHasStableIds(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MemoItemViewHolder(
             ItemMemoBinding.inflate(
@@ -43,14 +38,19 @@ class MemoListAdapter(private val memoViewModel: MemoViewModel) : ListAdapter<Me
             }
         }
     }
+
+    fun addItems(list: List<MemoItem>, runnable: Runnable) {
+        val sortedList = list.sortedByDescending { it.makeAt.time }
+        submitList(sortedList, runnable)
+    }
 }
 
 val memoListAsyncListUtil = object : DiffUtil.ItemCallback<MemoItem>() {
     override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 }

@@ -19,6 +19,7 @@ class MemoActivity : BaseActivity() {
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoViewModel: MemoViewModel
     lateinit var memoListAdapter : MemoListAdapter
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,8 @@ class MemoActivity : BaseActivity() {
             .build()
             .inject(this)
 
-        val binding =
-            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         initToolbar(binding.toolbar, "메모 리스트")
         initViewModel()
@@ -79,8 +80,9 @@ class MemoActivity : BaseActivity() {
     private fun findAndNotifyAllMemo(){
         compositeDisposable.add(
             memoViewModel.findAllMemo().subscribe {
-                val sortedList =it.sortedByDescending { it.makeAt.time }
-                memoListAdapter.submitList(sortedList)
+                memoListAdapter.addItems(it, Runnable {
+                    binding.rvMemoList.smoothScrollToPosition(0)
+                })
             })
     }
 }

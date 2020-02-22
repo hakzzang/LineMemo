@@ -14,10 +14,12 @@ class MemoGalleryRepository(private val memoDataBase: MemoDataBase) {
             .fromIterable(memoGalleries)
             .filter { wrapMemoGallery: WrapMemoGallery -> wrapMemoGallery.viewType != MemoGalleryViewType.ADD }
             .map { wrapMemoGallery: WrapMemoGallery -> wrapMemoGallery.memoGallery }
-            .flatMap { memoGallery ->
+            .flatMap {memoGallery ->
                 Observable.fromCallable {
+                    memoDataBase.getMemoGalleryDao().removeItemAt(memoId.toInt())
+                }.flatMap {
                     memoGallery.memoId = memoId.toInt()
-                    memoDataBase.getMemoGalleryDao().insert(memoGallery)
+                    Observable.fromCallable { memoDataBase.getMemoGalleryDao().insert(memoGallery) }
                 }
             }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityReadMemoBinding
 import hbs.com.linememo.di.*
@@ -82,8 +81,11 @@ class MemoReadActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_save_todo -> {
-                memoMakeViewModel.memoItem.value?.run {
-                    memoMakeViewModel.updateMemo(updateDateAt(this)).subscribe {
+                memoMakeViewModel.memoItem.value?.let { memoItem ->
+                    memoMakeViewModel.updateMemo(updateCurrentItem(memoItem))
+                        .flatMap { memoId ->
+                            memoMakeViewModel.insertMemoGalleries(memoItem.id.toLong(), memoMakeGalleryAdapter.currentList)
+                        }.subscribe {
                         setResult(ResourceKeys.COMPLETED)
                         finish()
                     }
@@ -93,8 +95,11 @@ class MemoReadActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun updateDateAt(memoItem: MemoItem): MemoItem {
+    private fun updateCurrentItem(memoItem: MemoItem): MemoItem {
         return memoItem.apply {
+            if (memoMakeGalleryAdapter.currentList.size > 1) {
+                this.thumbnail = memoMakeGalleryAdapter.currentList[1].memoGallery?.filePath ?: ""
+            }
             this.makeAt = Date()
         }
     }

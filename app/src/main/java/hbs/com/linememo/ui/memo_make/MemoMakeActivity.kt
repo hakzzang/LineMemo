@@ -14,6 +14,7 @@ import hbs.com.linememo.di.*
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.util.ResourceKeys
+import io.reactivex.Observable
 import javax.inject.Inject
 
 
@@ -79,13 +80,17 @@ class MemoMakeActivity : BaseActivity() {
         when (item.itemId) {
             R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
-                    if(memoMakeGalleryAdapter.currentList.isNotEmpty()){
+                    if (memoMakeGalleryAdapter.currentList.size > 1) {
                         //1인 이유는 0은 항상 ADD 라서,
                         this.thumbnail = memoMakeGalleryAdapter.currentList[1].memoGallery?.filePath?:""
                     }
                     compositeDisposable.add(memoMakeViewModel.insertMemo(this)
                         .flatMap { memoId ->
-                            memoMakeViewModel.insertMemoGalleries(memoId, memoMakeGalleryAdapter.currentList)
+                            if(memoMakeGalleryAdapter.currentList.size>1){
+                                memoMakeViewModel.insertMemoGalleries(memoId, memoMakeGalleryAdapter.currentList)
+                            }else{
+                                Observable.just(0)
+                            }
                         }.subscribe({
                             setResult(ResourceKeys.COMPLETED)
                             finish()
