@@ -16,6 +16,7 @@ import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
 import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.util.ResourceKeys
+import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
@@ -84,7 +85,14 @@ class MemoReadActivity : BaseActivity() {
                 memoMakeViewModel.memoItem.value?.let { memoItem ->
                     memoMakeViewModel.updateMemo(updateCurrentItem(memoItem))
                         .flatMap { memoId ->
-                            memoMakeViewModel.insertMemoGalleries(memoItem.id.toLong(), memoMakeGalleryAdapter.currentList)
+                            if (memoMakeGalleryAdapter.currentList.size > 1) {
+                                memoMakeViewModel.insertMemoGalleries(
+                                    memoItem.id.toLong(),
+                                    memoMakeGalleryAdapter.currentList
+                                )
+                            } else {
+                                Observable.just(0)
+                            }
                         }.subscribe {
                         setResult(ResourceKeys.COMPLETED)
                         finish()
