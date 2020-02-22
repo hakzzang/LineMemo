@@ -69,14 +69,8 @@ class MemoActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ResourceKeys.MAKE_MEMO) {
+        if (requestCode == ResourceKeys.MAKE_MEMO || requestCode == ResourceKeys.UPDATE_MEMO || requestCode == ResourceKeys.REMOVE_MEMO) {
             if (resultCode == ResourceKeys.COMPLETED) {
-                findAndNotifyAllMemo()
-            }
-        }
-
-        if(requestCode == ResourceKeys.UPDATE_MEMO){
-            if(resultCode == ResourceKeys.COMPLETED){
                 findAndNotifyAllMemo()
             }
         }

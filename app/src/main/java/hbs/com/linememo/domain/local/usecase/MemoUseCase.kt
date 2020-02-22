@@ -14,6 +14,7 @@ class MemoUseCase(
     fun findAllMemo() = memoRepository.findAllMemo()
     fun insertMemo(memoItem: MemoItem) = memoRepository.insertMemo(memoItem)
     fun updateMemo(memoItem: MemoItem) = memoRepository.updateMemo(memoItem)
+    fun removeMemoItems(memoIds:MutableList<Int>): Observable<MutableList<Unit>> = memoRepository.removeMemoItems(memoIds)
 
     fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
         memoGalleryRepository.insertMemoGalleries(memoId, memoGalleries)

@@ -8,6 +8,9 @@ interface MemoItemDao{
     @Query("SELECT * FROM MemoItem")
     fun findAllItems(): List<MemoItem>
 
+    @Query("DELETE FROM MemoItem WHERE id = :position")
+    fun removeItemAt(position:Int)
+
     @Insert
     fun insert(memoItem: MemoItem) : Long
 

@@ -21,4 +21,17 @@ class MemoRepository(private val memoDataBase: MemoDataBase) {
         .fromCallable { memoDataBase.getMemoItemDao().update(memoItem) }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
+
+    fun removeMemoItems(memoIds: MutableList<Int>): Observable<MutableList<Unit>> =
+        Observable
+            .fromIterable(memoIds)
+            .flatMap { memoId ->
+                Observable.fromCallable {
+                    memoDataBase.getMemoItemDao().removeItemAt(memoId)
+                }
+            }
+            .toList()
+            .toObservable()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 }

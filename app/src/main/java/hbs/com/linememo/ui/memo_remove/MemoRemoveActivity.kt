@@ -1,9 +1,8 @@
 package hbs.com.linememo.ui.memo_remove
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import androidx.core.view.isVisible
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +11,7 @@ import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityRemoveMemoBinding
 import hbs.com.linememo.di.*
 import hbs.com.linememo.ui.core.BaseActivity
+import hbs.com.linememo.util.ResourceKeys
 import javax.inject.Inject
 
 class MemoRemoveActivity : BaseActivity() {
@@ -29,10 +29,7 @@ class MemoRemoveActivity : BaseActivity() {
             .build()
             .inject(this)
 
-        binding = DataBindingUtil.setContentView<ActivityRemoveMemoBinding>(
-            this,
-            R.layout.activity_remove_memo
-        )
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_remove_memo)
 
         initToolbar(binding.toolbar, "메모 삭제", true)
         initViewModel()
@@ -51,6 +48,20 @@ class MemoRemoveActivity : BaseActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_remove_todo -> {
+                memoRemoveViewModel.removePositions.value?.apply {
+                    compositeDisposable.add(memoRemoveViewModel.removeMemoItems(this).subscribe {
+                        setResult(ResourceKeys.COMPLETED)
+                        finish()
+                    })
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun initViewModel() {
         memoRemoveViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoRemoveViewModel::class.java)
@@ -62,7 +73,8 @@ class MemoRemoveActivity : BaseActivity() {
         binding.rvMemoList.adapter =
             MemoRemoveAdapter(memoRemoveViewModel).also { memoRemoveAdapter ->
                 compositeDisposable.add(memoRemoveViewModel.findAllMemo().subscribe {
-                    memoRemoveAdapter.submitList(it)
+                    val sortedList = it.sortedByDescending { it.makeAt.time }
+                    memoRemoveAdapter.submitList(sortedList)
                 })
             }
         binding.rvMemoList.layoutManager = LinearLayoutManager(this)

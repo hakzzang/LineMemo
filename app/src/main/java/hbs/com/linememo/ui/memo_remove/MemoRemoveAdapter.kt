@@ -2,7 +2,6 @@ package hbs.com.linememo.ui.memo_remove
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.databinding.ItemRemoveMemoBinding
@@ -34,16 +33,11 @@ class MemoRemoveAdapter(private val memoRemoveViewModel: MemoRemoveViewModel) : 
             binding.root.setOnClickListener {
                 binding.cbRemoveMemoItem.isChecked = !binding.cbRemoveMemoItem.isChecked
                 if(binding.cbRemoveMemoItem.isChecked){
-                    memoRemoveViewModel.addRemovePosition(position)
+                    memoRemoveViewModel.addRemoveMemoId(memoItem.id)
                 }else {
-                    memoRemoveViewModel.removeRemovePosition(position)
+                    memoRemoveViewModel.removeRemoveMemoId(memoItem.id)
                 }
             }
         }
-    }
-
-    fun addItems(list: List<MemoItem>, runnable: Runnable) {
-        val sortedList = list.sortedByDescending { it.makeAt.time }
-        submitList(sortedList, runnable)
     }
 }

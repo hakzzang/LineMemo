@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hbs.com.linememo.domain.local.usecase.MemoUseCase
 import hbs.com.linememo.util.SingleLiveEvent
+import io.reactivex.Observable
 
 class MemoRemoveViewModel(val memoUseCase: MemoUseCase) : ViewModel() {
     private val _removeCheck = SingleLiveEvent<Boolean>()
@@ -18,24 +19,26 @@ class MemoRemoveViewModel(val memoUseCase: MemoUseCase) : ViewModel() {
 
     fun changeRemoveCheck() = _removeCheck.setValue(true)
 
-    fun findAllMemo() = memoUseCase.findAllMemo()
-    fun addRemovePosition(position: Int) {
+    fun addRemoveMemoId(memoId: Int) {
         val newList = mutableListOf<Int>()
         _removePositions.value?.let {
             newList.addAll(it)
-            newList.add(position)
+            newList.add(memoId)
         }
         _removePositions.value = newList
     }
 
-    fun removeRemovePosition(position: Int) {
+    fun removeRemoveMemoId(memoId: Int) {
         val newList = mutableListOf<Int>()
         _removePositions.value?.let {
             newList.addAll(it)
-            newList.remove(position)
+            newList.remove(memoId)
         }
         _removePositions.value = newList
     }
 
     fun containsRemovePositionOf(position: Int) = removePositions.value?.contains(position) ?: false
+
+    fun findAllMemo() = memoUseCase.findAllMemo()
+    fun removeMemoItems(memoIds:MutableList<Int>): Observable<MutableList<Unit>> = memoUseCase.removeMemoItems(memoIds)
 }
