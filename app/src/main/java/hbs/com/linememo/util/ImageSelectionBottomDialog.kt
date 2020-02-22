@@ -12,7 +12,8 @@ interface BottomDialogDelegation {
     fun selectItem(position: Int)
 }
 
-class ImageSelectionBottomDialog(context: Context, private val bottomDialogDelegation: BottomDialogDelegation) : BottomSheetDialog(context) {
+class ImageSelectionBottomDialog(context: Context) : BottomSheetDialog(context) {
+    lateinit var bottomDialogDelegation: BottomDialogDelegation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_image_selection_bottom)

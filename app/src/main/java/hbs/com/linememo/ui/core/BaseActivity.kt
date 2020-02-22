@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import hbs.com.linememo.R
 import hbs.com.linememo.util.BottomDialogDelegation
+import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
@@ -171,7 +173,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun makeBottomDialogDelegation(): BottomDialogDelegation {
+    fun makeBottomDialogDelegation(bottomDialog: BottomSheetDialog): BottomDialogDelegation {
         return object : BottomDialogDelegation {
             override fun selectItem(position: Int) {
                 when (position) {
@@ -191,6 +193,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
                     }
                 }
+                bottomDialog.dismiss()
             }
         }
     }
