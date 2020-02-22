@@ -1,15 +1,14 @@
 package hbs.com.linememo.di
 
 import androidx.lifecycle.ViewModel
-import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import hbs.com.linememo.domain.local.repository.MemoRepository
 import hbs.com.linememo.domain.local.usecase.MemoUseCase
 import hbs.com.linememo.ui.memo.MemoViewModel
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
+import hbs.com.linememo.ui.memo_remove.MemoRemoveViewModel
 import javax.inject.Provider
 import kotlin.reflect.KClass
 
@@ -32,6 +31,14 @@ class ViewModelModule{
     fun getMemoMakeViewModel(memoUseCase: MemoUseCase): ViewModel {
         return MemoMakeViewModel(memoUseCase)
     }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(MemoRemoveViewModel::class)
+    fun getMemoRemoveViewModel(memoUseCase: MemoUseCase): ViewModel {
+        return MemoRemoveViewModel(memoUseCase)
+    }
+
 
     @Provides
     fun getViewModelFactory(

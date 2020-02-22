@@ -8,4 +8,6 @@
     <dimen name="material_text_headline2">20sp</dimen>
     <dimen name="material_text_headline">24sp</dimen>
     <dimen name="material_text_display1">34sp</dimen>
+    <dimen name="check_box_default_size">32dp</dimen>
+    <dimen name="selection_container_side_padding">12dp</dimen>
 </resources>

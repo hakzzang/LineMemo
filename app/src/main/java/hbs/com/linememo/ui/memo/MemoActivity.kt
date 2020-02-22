@@ -2,6 +2,9 @@ package hbs.com.linememo.ui.memo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +14,9 @@ import hbs.com.linememo.di.*
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import hbs.com.linememo.ui.memo_make.MemoNavigator
+import hbs.com.linememo.ui.memo_remove.MemoRemoveActivity
 import hbs.com.linememo.util.ResourceKeys
+import io.reactivex.Observable
 import javax.inject.Inject
 
 class MemoActivity : BaseActivity() {
@@ -84,5 +89,20 @@ class MemoActivity : BaseActivity() {
                     binding.rvMemoList.smoothScrollToPosition(0)
                 })
             })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_remove_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_remove_todo -> {
+                val intent = Intent(this, MemoRemoveActivity::class.java)
+                startActivityForResult(intent, ResourceKeys.REMOVE_MEMO)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

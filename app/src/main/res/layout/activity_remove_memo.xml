@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="memoRemoveViewModel"
+            type="hbs.com.linememo.ui.memo_remove.MemoRemoveViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:title="메모 삭제" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_all_selection_items"
+            style="@style/TwoLineItemTheme"
+            android:gravity="center_vertical"
+            android:onClick="@{()->memoRemoveViewModel.changeRemoveCheck()}"
+            android:paddingLeft="@dimen/selection_container_side_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_all_selection_items"
+                android:layout_width="@dimen/check_box_default_size"
+                android:layout_height="@dimen/check_box_default_size"
+                android:checked="@{memoRemoveViewModel.removeCheck}"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/SubHeadTextView"
+                android:text="@string/all_selection_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cb_all_selection_items"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_all_selection_mount"
+                style="@style/TextBodyTextView"
+                android:paddingRight="@dimen/selection_container_side_padding"
+                android:layout_gravity="center_vertical|end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1개" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_memo_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_all_selection_items" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

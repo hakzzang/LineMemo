@@ -5,6 +5,7 @@ import android.Manifest
 object ResourceKeys {
     const val MAKE_MEMO = 300
     const val UPDATE_MEMO = 301
+    const val REMOVE_MEMO = 302
 
     const val COMPLETED = 200
 

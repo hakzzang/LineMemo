@@ -11,16 +11,15 @@ import io.reactivex.schedulers.Schedulers
 class MemoGalleryRepository(private val memoDataBase: MemoDataBase) {
     fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
         Observable
-            .fromIterable(memoGalleries)
+            .fromCallable {
+                memoDataBase.getMemoGalleryDao().removeItemAt(memoId.toInt())
+            }
+            .flatMapIterable { memoGalleries }
             .filter { wrapMemoGallery: WrapMemoGallery -> wrapMemoGallery.viewType != MemoGalleryViewType.ADD }
             .map { wrapMemoGallery: WrapMemoGallery -> wrapMemoGallery.memoGallery }
             .flatMap {memoGallery ->
-                Observable.fromCallable {
-                    memoDataBase.getMemoGalleryDao().removeItemAt(memoId.toInt())
-                }.flatMap {
-                    memoGallery.memoId = memoId.toInt()
-                    Observable.fromCallable { memoDataBase.getMemoGalleryDao().insert(memoGallery) }
-                }
+                memoGallery.memoId = memoId.toInt()
+                Observable.fromCallable { memoDataBase.getMemoGalleryDao().insert(memoGallery) }
             }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
