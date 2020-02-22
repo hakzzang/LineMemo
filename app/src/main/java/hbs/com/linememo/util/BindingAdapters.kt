@@ -14,7 +14,7 @@ fun TextView.onDateToString(date: Date?) {
     if (date == null) {
         return
     }
-    val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일\nhh:mm:ss")
+    val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일\nhh시 mm분 ss초")
     val displayDate =dateFormat.format(date)
     text = displayDate
 }

@@ -1,8 +1,10 @@
 package hbs.com.linememo.ui.memo_remove
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -51,12 +53,16 @@ class MemoRemoveActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_remove_todo -> {
-                memoRemoveViewModel.removePositions.value?.apply {
-                    compositeDisposable.add(memoRemoveViewModel.removeMemoItems(this).subscribe {
-                        setResult(ResourceKeys.COMPLETED)
-                        finish()
-                    })
-                }
+                AlertDialog.Builder(this).setTitle(getString(R.string.all_text_want_delete))
+                    .setMessage(getString(R.string.all_text_delete_confirm))
+                    .setPositiveButton(R.string.all_text_yes) { dialogInterface, i ->
+                        memoRemoveViewModel.removePositions.value?.apply {
+                            compositeDisposable.add(memoRemoveViewModel.removeMemoItems(this).subscribe {
+                                setResult(ResourceKeys.COMPLETED)
+                                finish()
+                            })
+                        }
+                    }.setNegativeButton(R.string.all_text_no) { dialogInterface, _ -> dialogInterface.dismiss()  }.show()
             }
         }
         return super.onOptionsItemSelected(item)
