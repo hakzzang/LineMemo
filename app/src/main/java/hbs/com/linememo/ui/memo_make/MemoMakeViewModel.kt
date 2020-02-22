@@ -32,5 +32,5 @@ class MemoMakeViewModel @Inject constructor(
     fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
         memoUseCase.insertMemoGalleries(memoId, memoGalleries)
 
-    fun selectMemoGalleries(): Observable<List<MemoGallery>> = memoUseCase.selectMemoGalleries()
+    fun selectMemoGalleries(memoId: Int): Observable<List<MemoGallery>> = memoUseCase.selectMemoGalleries(memoId)
 }

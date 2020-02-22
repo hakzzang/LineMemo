@@ -12,8 +12,6 @@ import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.util.ResourceKeys
-import io.reactivex.disposables.CompositeDisposable
-import java.util.*
 import javax.inject.Inject
 
 class MemoActivity : BaseActivity() {

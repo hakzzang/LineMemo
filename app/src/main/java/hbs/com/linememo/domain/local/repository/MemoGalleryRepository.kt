@@ -22,8 +22,8 @@ class MemoGalleryRepository(private val memoDataBase: MemoDataBase) {
             }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-    fun selectMemoGalleries() : Observable<List<MemoGallery>> =
-        Observable.fromCallable { memoDataBase.getMemoGalleryDao().findAllItems() }
+    fun selectMemoGalleries(memoId: Int): Observable<List<MemoGallery>> =
+        Observable.fromCallable { memoDataBase.getMemoGalleryDao().findItemsAt(memoId) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 }

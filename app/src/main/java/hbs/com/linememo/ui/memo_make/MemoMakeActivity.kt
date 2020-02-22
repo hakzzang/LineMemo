@@ -79,6 +79,10 @@ class MemoMakeActivity : BaseActivity() {
         when (item.itemId) {
             R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
+                    if(memoMakeGalleryAdapter.currentList.isNotEmpty()){
+                        //1인 이유는 0은 항상 ADD 라서,
+                        this.thumbnail = memoMakeGalleryAdapter.currentList[1].memoGallery?.filePath?:""
+                    }
                     compositeDisposable.add(memoMakeViewModel.insertMemo(this)
                         .flatMap { memoId ->
                             memoMakeViewModel.insertMemoGalleries(memoId, memoMakeGalleryAdapter.currentList)

@@ -18,5 +18,5 @@ class MemoUseCase(
     fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
         memoGalleryRepository.insertMemoGalleries(memoId, memoGalleries)
 
-    fun selectMemoGalleries() : Observable<List<MemoGallery>> = memoGalleryRepository.selectMemoGalleries()
+    fun selectMemoGalleries(memoId: Int) : Observable<List<MemoGallery>> = memoGalleryRepository.selectMemoGalleries(memoId)
 }

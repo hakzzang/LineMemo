@@ -4,12 +4,15 @@ import androidx.room.*
 import hbs.com.linememo.domain.model.MemoGallery
 
 @Dao
-interface MemoGalleryDao{
+interface MemoGalleryDao {
     @Query("SELECT * FROM MemoGallery")
     fun findAllItems(): List<MemoGallery>
 
+    @Query("SELECT * FROM MemoGallery WHERE memo_id =:memoId")
+    fun findItemsAt(memoId: Int): List<MemoGallery>
+
     @Insert
-    fun insert(memoGallery: MemoGallery) : Long
+    fun insert(memoGallery: MemoGallery): Long
 
     @Update
     fun update(memoGallery: MemoGallery)

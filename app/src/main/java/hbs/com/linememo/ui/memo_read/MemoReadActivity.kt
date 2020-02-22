@@ -66,10 +66,10 @@ class MemoReadActivity : BaseActivity() {
         memoMakeGalleryAdapter = MemoMakeGalleryAdapter(memoMakeViewModel)
         binding.rvMemoGallery.adapter = memoMakeGalleryAdapter
         binding.rvMemoGallery.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        compositeDisposable.add(memoMakeViewModel.selectMemoGalleries().subscribe { memoGalleries ->
+        val memoItem = intent.getParcelableExtra<MemoItem>(ResourceKeys.MEMO_ITEM_KEY) ?: return
+        compositeDisposable.add(memoMakeViewModel.selectMemoGalleries(memoItem.id).subscribe { memoGalleries ->
             memoMakeGalleryAdapter.initItems(memoGalleries)
         })
-        val memoItem = intent.getParcelableExtra<MemoItem>(ResourceKeys.MEMO_ITEM_KEY) ?: return
         memoMakeViewModel.inputMemo(memoItem)
         binding.memoItem = memoMakeViewModel.memoItem.value
     }

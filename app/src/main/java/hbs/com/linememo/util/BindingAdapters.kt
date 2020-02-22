@@ -1,7 +1,10 @@
 package hbs.com.linememo.util
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,4 +22,9 @@ fun TextView.onDateToString(date: Date?) {
 @BindingAdapter(value = ["setOnlyText"])
 fun TextView.setOnlyText(text:String) {
     this.text = text
+}
+
+@BindingAdapter(value= ["setThumbnail"])
+fun ImageView.setThumbnail(filePath:String){
+    Glide.with(this).load(filePath).apply(RequestOptions.circleCropTransform().override(width, height)).into(this)
 }
