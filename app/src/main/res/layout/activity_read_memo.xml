@@ -27,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="#ffffff"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeColor="@color/transparent_color"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -36,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@={memoItem.title}"
+                android:textSize="@dimen/material_text_headline2"
                 android:hint="@string/make_memo_title_hint" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -44,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:boxBackgroundColor="#ffffff"
+            app:boxStrokeWidth="0dp"
             app:layout_constraintBottom_toTopOf="@id/rv_memo_gallery"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -53,17 +57,27 @@
                 android:id="@+id/et_memo_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="top"
                 android:text="@={memoItem.content}"
+                app:boxStrokeColor="@color/transparent_color"
+                android:gravity="top|start"
                 android:hint="@string/make_memo_content_hint" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_memo_gallery"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/todo_gallery_size"
             tools:itemCount="10"
             tools:listitem="@layout/item_memo_gallery"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/layout_bottom_bar" />
+
+        <include
+            android:id="@+id/layout_bottom_bar"
+            layout="@layout/layout_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

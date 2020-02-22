@@ -7,10 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -19,6 +17,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import hbs.com.linememo.R
+import hbs.com.linememo.util.BottomDialogDelegation
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
@@ -163,7 +162,6 @@ abstract class BaseActivity : AppCompatActivity() {
         if (!isExistDir) {
             storageDir?.mkdirs()
         }
-        Log.d("storageDir", storageDir?.path)
         return File.createTempFile(
             "JPEG_${timeStamp}_",
             ".jpg",
@@ -173,24 +171,28 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun showSelectionThumbnailDialog() {
-        AlertDialog
-            .Builder(this)
-            .setTitle(R.string.thumbnail_selection_title)
-            .setItems(R.array.thumbnail_selection_items)
-            { dialogInterface, position ->
-                if (position == 0) {
-                    checkPermissions(
-                        ResourceKeys.CAMERA_PERMISSIONS,
-                        ResourceKeys.CAMERA_PERMISSION_CODE
-                    )
-                } else if (position == 1) {
-                    checkPermissions(
-                        ResourceKeys.STORAGE_PERMISSIONS,
-                        ResourceKeys.STORAGE_PERMISSION_CODE
-                    )
+    fun makeBottomDialogDelegation(): BottomDialogDelegation {
+        return object : BottomDialogDelegation {
+            override fun selectItem(position: Int) {
+                when (position) {
+                    0 -> {
+                        checkPermissions(
+                            ResourceKeys.CAMERA_PERMISSIONS,
+                            ResourceKeys.CAMERA_PERMISSION_CODE
+                        )
+                    }
+                    1 -> {
+                        checkPermissions(
+                            ResourceKeys.STORAGE_PERMISSIONS,
+                            ResourceKeys.STORAGE_PERMISSION_CODE
+                        )
+                    }
+                    2 -> {
+
+                    }
                 }
-            }.show()
+            }
+        }
     }
 
     private fun notifyNewPictureForBroadcast() {

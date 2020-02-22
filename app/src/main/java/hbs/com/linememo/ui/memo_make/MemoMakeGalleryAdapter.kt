@@ -77,12 +77,10 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
 
     fun initItems(){
         val newList = mutableListOf<WrapMemoGallery>()
-        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
         submitList(newList)
     }
     fun initItems(memoGalleries:List<MemoGallery>){
         val newList = mutableListOf<WrapMemoGallery>()
-        newList.add(WrapMemoGallery(MemoGalleryViewType.ADD))
         for(memoGallery in memoGalleries){
             newList.add(WrapMemoGallery(memoGallery, MemoGalleryViewType.PICTURE))
         }

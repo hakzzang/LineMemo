@@ -10,4 +10,6 @@
     <dimen name="material_text_display1">34sp</dimen>
     <dimen name="check_box_default_size">32dp</dimen>
     <dimen name="selection_container_side_padding">12dp</dimen>
+    <dimen name="image_selection_bottom_dialog_height">180dp</dimen>
+    <dimen name="selection_icon_size">24dp</dimen>
 </resources>

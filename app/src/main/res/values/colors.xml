@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white_color">#ffffff</color>
+    <color name="black_color">#000000</color>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
@@ -14,4 +16,5 @@
     <color name="gray_800">#424242</color>
     <color name="gray_900">#212121</color>
     <color name="red_main">#F94D7D</color>
+    <color name="transparent_color">#00ffffff</color>
 </resources>

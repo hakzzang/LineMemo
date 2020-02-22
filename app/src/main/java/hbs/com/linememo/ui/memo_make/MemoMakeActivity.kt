@@ -13,6 +13,7 @@ import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
+import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -52,12 +53,6 @@ class MemoMakeActivity : BaseActivity() {
     private fun initViewModel() {
         memoMakeViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoMakeViewModel::class.java)
-
-        memoMakeViewModel.navigator = object : MemoNavigator {
-            override fun showChoiceThumbnailDialog() {
-                showSelectionThumbnailDialog()
-            }
-        }
     }
 
     private fun initView(binding: ActivityMakeMemoBinding) {
@@ -69,6 +64,9 @@ class MemoMakeActivity : BaseActivity() {
         binding.rvMemoGallery.layoutManager =
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.memoItem = memoMakeViewModel.memoItem.value
+        binding.layoutBottomBar.setOnClickListener {
+            ImageSelectionBottomDialog(it.context, makeBottomDialogDelegation()).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -80,9 +78,9 @@ class MemoMakeActivity : BaseActivity() {
         when (item.itemId) {
             R.id.item_save_todo -> {
                 memoMakeViewModel.memoItem.value?.run {
-                    if (memoMakeGalleryAdapter.currentList.size > 1) {
-                        //1인 이유는 0은 항상 ADD 라서,
-                        this.thumbnail = memoMakeGalleryAdapter.currentList[1].memoGallery?.filePath?:""
+                    if (memoMakeGalleryAdapter.currentList.size > 0) {
+                        this.thumbnail =
+                            memoMakeGalleryAdapter.currentList[0].memoGallery?.filePath ?: ""
                     }
                     compositeDisposable.add(memoMakeViewModel.insertMemo(this)
                         .flatMap { memoId ->

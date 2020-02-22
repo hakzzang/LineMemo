@@ -17,6 +17,9 @@
     <string name="all_text_yes">네</string>
     <string name="all_text_no">아니오</string>
     <string name="all_text_delete_confirm">네를 누르면 삭제됩니다.</string>
+    <string name="all_text_take_picture">사진 촬영</string>
+    <string name="all_text_selection_gallery">갤러리 선택</string>
+    <string name="all_text_insert_link">링크 삽입</string>
     <string-array name="thumbnail_selection_items">
         <item>카메라</item>
         <item>갤러리</item>

@@ -15,6 +15,8 @@ import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
 import hbs.com.linememo.ui.memo_make.MemoNavigator
+import hbs.com.linememo.util.BottomDialogDelegation
+import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.Observable
 import java.util.*
@@ -53,12 +55,6 @@ class MemoReadActivity : BaseActivity() {
     private fun initViewModel() {
         memoMakeViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoMakeViewModel::class.java)
-
-        memoMakeViewModel.navigator = object : MemoNavigator {
-            override fun showChoiceThumbnailDialog() {
-                showSelectionThumbnailDialog()
-            }
-        }
     }
 
     private fun initView(binding: ActivityReadMemoBinding) {
@@ -72,6 +68,9 @@ class MemoReadActivity : BaseActivity() {
         })
         memoMakeViewModel.inputMemo(memoItem)
         binding.memoItem = memoMakeViewModel.memoItem.value
+        binding.layoutBottomBar.setOnClickListener {
+            ImageSelectionBottomDialog(it.context, makeBottomDialogDelegation()).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -105,8 +104,8 @@ class MemoReadActivity : BaseActivity() {
 
     private fun updateCurrentItem(memoItem: MemoItem): MemoItem {
         return memoItem.apply {
-            if (memoMakeGalleryAdapter.currentList.size > 1) {
-                this.thumbnail = memoMakeGalleryAdapter.currentList[1].memoGallery?.filePath ?: ""
+            if (memoMakeGalleryAdapter.currentList.size > 0) {
+                this.thumbnail = memoMakeGalleryAdapter.currentList[0].memoGallery?.filePath ?: ""
             }
             this.makeAt = Date()
         }
