@@ -88,11 +88,11 @@ class MemoReadActivity : BaseActivity() {
                         .flatMap { memoId ->
                             if (memoMakeGalleryAdapter.currentList.size > 0) {
                                 memoMakeViewModel.insertMemoGalleries(
-                                    memoItem.id.toLong(),
+                                    memoItem.id,
                                     memoMakeGalleryAdapter.currentList
                                 )
                             } else {
-                                Observable.just(0)
+                                memoMakeViewModel.removeMemoGalleries(memoItem.id)
                             }
                         }.subscribe {
                         setResult(ResourceKeys.COMPLETED)
@@ -108,6 +108,8 @@ class MemoReadActivity : BaseActivity() {
         return memoItem.apply {
             if (memoMakeGalleryAdapter.currentList.size > 0) {
                 this.thumbnail = memoMakeGalleryAdapter.currentList[0].memoGallery?.filePath ?: ""
+            }else{
+                this.thumbnail = ""
             }
             this.makeAt = Date()
         }

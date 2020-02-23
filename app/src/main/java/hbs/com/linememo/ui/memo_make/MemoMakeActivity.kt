@@ -87,7 +87,7 @@ class MemoMakeActivity : BaseActivity() {
                     compositeDisposable.add(memoMakeViewModel.insertMemo(this)
                         .flatMap { memoId ->
                             if (memoMakeGalleryAdapter.currentList.size > 0) {
-                                memoMakeViewModel.insertMemoGalleries(memoId, memoMakeGalleryAdapter.currentList)
+                                memoMakeViewModel.insertMemoGalleries(memoId.toInt(), memoMakeGalleryAdapter.currentList)
                             }else{
                                 Observable.just(0)
                             }

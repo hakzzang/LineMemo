@@ -16,8 +16,9 @@ class MemoUseCase(
     fun updateMemo(memoItem: MemoItem) = memoRepository.updateMemo(memoItem)
     fun removeMemoItems(memoIds:MutableList<Int>): Observable<MutableList<Unit>> = memoRepository.removeMemoItems(memoIds)
 
-    fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
+    fun insertMemoGalleries(memoId: Int, memoGalleries: MutableList<WrapMemoGallery>) =
         memoGalleryRepository.insertMemoGalleries(memoId, memoGalleries)
 
     fun selectMemoGalleries(memoId: Int) : Observable<List<MemoGallery>> = memoGalleryRepository.selectMemoGalleries(memoId)
+    fun removeMemoGalleries(memoId: Int): Observable<Unit> = memoGalleryRepository.removeMemoGalleries(memoId)
 }

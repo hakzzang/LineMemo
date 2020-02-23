@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class MemoGalleryRepository(private val memoDataBase: MemoDataBase) {
-    fun insertMemoGalleries(memoId: Long, memoGalleries: MutableList<WrapMemoGallery>) =
+    fun insertMemoGalleries(memoId: Int, memoGalleries: MutableList<WrapMemoGallery>) =
         Observable
             .fromCallable {
                 memoDataBase.getMemoGalleryDao().removeItemAt(memoId.toInt())
@@ -27,4 +27,10 @@ class MemoGalleryRepository(private val memoDataBase: MemoDataBase) {
         Observable.fromCallable { memoDataBase.getMemoGalleryDao().findItemsAt(memoId) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+
+    fun removeMemoGalleries(memoId: Int): Observable<Unit> = Observable
+        .fromCallable {
+            memoDataBase.getMemoGalleryDao().removeItemAt(memoId)
+        }.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 }

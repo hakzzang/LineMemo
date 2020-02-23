@@ -98,15 +98,6 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
         submitList(newList)
     }
 
-    fun addItems(memoGalleries: List<MemoGallery>){
-        val newList = mutableListOf<WrapMemoGallery>()
-        newList.addAll(currentList)
-        for(memoGallery in memoGalleries){
-            newList.add(WrapMemoGallery(memoGallery, MemoGalleryViewType.PICTURE))
-        }
-        submitList(newList)
-    }
-
     fun removeItem(position: Int){
         val oldList = currentList
         val newList = mutableListOf<WrapMemoGallery>()

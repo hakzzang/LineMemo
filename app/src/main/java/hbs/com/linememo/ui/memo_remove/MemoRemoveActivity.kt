@@ -21,6 +21,7 @@ class MemoRemoveActivity : BaseActivity() {
     lateinit var memoRemoveViewModel: MemoRemoveViewModel
     lateinit var binding: ActivityRemoveMemoBinding
     lateinit var adapter: MemoRemoveAdapter
+    private var menuItem: MenuItem? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -42,12 +43,8 @@ class MemoRemoveActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_remove_menu, menu);
-        val menuItem = menu?.findItem(R.id.item_remove_todo)
-        memoRemoveViewModel.removePositions.observe(this, Observer {
-            menuItem?.isVisible = it.size > 0
-            binding.tvAllSelectionMount.text = getString(R.string.all_mount_text, it.size)
-            binding.cbAllSelectionItems.isChecked = it.size == adapter.currentList.size
-        })
+        menuItem = menu?.findItem(R.id.item_remove_todo)
+        menuItem?.isVisible = false
         return true
     }
 
@@ -82,17 +79,21 @@ class MemoRemoveActivity : BaseActivity() {
                 adapter.notifyCurrentItems()
             }
         })
+        compositeDisposable.add(memoRemoveViewModel.findAllMemo().subscribe {
+            adapter.addAllItems(it)
+        })
+        memoRemoveViewModel.removePositions.observe(this, Observer {
+            menuItem?.setVisible(it.size > 0)
+            binding.tvAllSelectionMount.text = getString(R.string.all_mount_text, it.size)
+            binding.cbAllSelectionItems.isChecked = it.size == adapter.currentList.size
+        })
     }
 
     private fun initView(binding: ActivityRemoveMemoBinding) {
         adapter = MemoRemoveAdapter(memoRemoveViewModel)
         binding.lifecycleOwner = this
         binding.memoRemoveViewModel = memoRemoveViewModel
-        binding.rvMemoList.adapter = adapter.also { memoRemoveAdapter ->
-                compositeDisposable.add(memoRemoveViewModel.findAllMemo().subscribe {
-                    adapter.addAllItems(it)
-                })
-            }
+        binding.rvMemoList.adapter = adapter
         binding.rvMemoList.layoutManager = LinearLayoutManager(this)
     }
 }
