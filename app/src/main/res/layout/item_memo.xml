@@ -20,21 +20,20 @@
 
         <ImageView
             android:id="@+id/iv_memo_thumbnail"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginLeft="18dp"
+            android:layout_width="@dimen/memo_thumbnail_icon_size"
+            android:layout_height="@dimen/memo_thumbnail_icon_size"
+            android:layout_marginLeft="@dimen/item_memo_side_margin"
             setThumbnail="@{memoItem.thumbnail}"
             android:visibility="@{TextUtils.isEmpty(memoItem.thumbnail)?View.INVISIBLE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_launcher_round" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_memo_text_thumbnail"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginLeft="18dp"
+            android:layout_width="@dimen/memo_thumbnail_icon_size"
+            android:layout_height="@dimen/memo_thumbnail_icon_size"
+            android:layout_marginLeft="@dimen/item_memo_side_margin"
             android:gravity="center"
             android:textSize="@dimen/material_text_headline"
             android:textStyle="bold"
@@ -52,7 +51,7 @@
             android:id="@+id/tv_memo_title"
             style="@style/SubHeadTextView"
             android:layout_width="0dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="@dimen/memo_content_margin_side"
             android:text="@{TextUtils.isEmpty(memoItem.title)?@string/memo_title_empty:memoItem.title}"
             android:maxLines="1"
             android:ellipsize="end"
@@ -66,7 +65,7 @@
             android:id="@+id/tv_memo_content"
             style="@style/TextBodyTextView"
             android:layout_width="0dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="@dimen/memo_content_margin_side"
             android:text="@{TextUtils.isEmpty(memoItem.content)?@string/memo_content_empty:memoItem.content}"
             android:maxLines="1"
             android:ellipsize="end"
@@ -82,11 +81,12 @@
             onDateToString="@{memoItem.makeAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="@dimen/item_memo_side_margin"
+            android:textAlignment="textEnd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="2020년 2월 29일" />
+            tools:text="2020년 2월 29일\n10시10분" />
 
         <View
             android:layout_width="match_parent"

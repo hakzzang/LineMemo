@@ -39,6 +39,9 @@
                 android:layout_height="match_parent"
                 android:text="@={memoItem.title}"
                 android:textSize="@dimen/material_text_headline2"
+                android:textColor="@color/black_color"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
                 android:hint="@string/make_memo_title_hint" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -60,6 +63,9 @@
                 android:layout_height="match_parent"
                 android:text="@={memoItem.content}"
                 android:gravity="top|start"
+                android:textColor="@color/black_color"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
                 android:hint="@string/make_memo_content_hint" />
         </com.google.android.material.textfield.TextInputLayout>
 

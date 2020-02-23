@@ -22,4 +22,7 @@
     <dimen name="layout_bottom_bar_height">48dp</dimen>
     <dimen name="layout_bottom_bar_margin">12dp</dimen>
     <dimen name="thumbnail_remove_icon_size">24dp</dimen>
+    <dimen name="item_memo_side_margin">16dp</dimen>
+    <dimen name="memo_thumbnail_icon_size">36dp</dimen>
+    <dimen name="memo_content_margin_side">12dp</dimen>
 </resources>

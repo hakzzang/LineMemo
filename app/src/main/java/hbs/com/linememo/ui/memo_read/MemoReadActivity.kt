@@ -1,8 +1,13 @@
 package hbs.com.linememo.ui.memo_read
 
+import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,18 +17,27 @@ import hbs.com.linememo.di.*
 import hbs.com.linememo.domain.model.MemoItem
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
+import hbs.com.linememo.ui.core.requestFocusOffMemo
+import hbs.com.linememo.ui.core.requestFocusOnMemo
 import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
 import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
+import hbs.com.linememo.util.onShortDateToString
+import kotlinx.android.synthetic.main.layout_bottom_bar.view.*
 import java.util.*
 import javax.inject.Inject
+
 
 class MemoReadActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoMakeViewModel: MemoMakeViewModel
     lateinit var memoMakeGalleryAdapter: MemoMakeGalleryAdapter
+
+    private val MAX_CLICK_DURATION = 50
+    private var startClickTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -68,6 +82,19 @@ class MemoReadActivity : BaseActivity() {
         binding.layoutBottomBar.setOnClickListener {
             ImageSelectionBottomDialog(it.context,makeBottomImageSelectionDialogDelegation()).show()
         }
+        binding.layoutBottomBar.tv_update_time.visibility = View.VISIBLE
+        binding.layoutBottomBar.tv_update_time.onShortDateToString(memoItem.makeAt)
+
+        binding.etMemoTitle.setOnTouchListener(makeMemoViewTouchListener {
+            binding.etMemoTitle.requestFocusOnMemo()
+            binding.etMemoContent.requestFocusOffMemo()
+        })
+
+        binding.etMemoContent.setOnTouchListener(makeMemoViewTouchListener {
+            binding.etMemoTitle.requestFocusOffMemo()
+            binding.etMemoContent.requestFocusOnMemo()
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -109,4 +136,26 @@ class MemoReadActivity : BaseActivity() {
             this.makeAt = Date()
         }
     }
+
+    fun makeMemoViewTouchListener(focusLogic: () -> Unit) =
+        View.OnTouchListener { view, motionEvent ->
+            if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
+                startClickTime = SystemClock.currentThreadTimeMillis()
+                false
+            } else if (motionEvent.actionMasked == MotionEvent.ACTION_UP) {
+                val endClickTime = SystemClock.currentThreadTimeMillis()
+                if (endClickTime - startClickTime < MAX_CLICK_DURATION) {
+                    focusLogic()
+                    showKeyBoard(view)
+                }
+                true
+            }
+            false
+        }
+
+    private fun showKeyBoard(view: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, 0)
+    }
+
 }
