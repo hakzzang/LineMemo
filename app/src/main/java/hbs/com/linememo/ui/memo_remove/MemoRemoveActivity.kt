@@ -46,6 +46,7 @@ class MemoRemoveActivity : BaseActivity() {
         memoRemoveViewModel.removePositions.observe(this, Observer {
             menuItem?.isVisible = it.size > 0
             binding.tvAllSelectionMount.text = getString(R.string.all_mount_text, it.size)
+            binding.cbAllSelectionItems.isChecked = it.size == adapter.currentList.size
         })
         return true
     }
