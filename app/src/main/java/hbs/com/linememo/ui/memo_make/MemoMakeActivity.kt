@@ -65,9 +65,7 @@ class MemoMakeActivity : BaseActivity() {
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.memoItem = memoMakeViewModel.memoItem.value
         binding.layoutBottomBar.setOnClickListener {
-            ImageSelectionBottomDialog(it.context)
-                .apply{ bottomDialogDelegation = makeBottomDialogDelegation(this) }
-                .show()
+            ImageSelectionBottomDialog(it.context, makeBottomImageSelectionDialogDelegation()).show()
         }
     }
 

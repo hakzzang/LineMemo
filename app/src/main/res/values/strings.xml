@@ -8,6 +8,7 @@
     <string name="make_memo_title_hint">제목</string>
     <string name="make_memo_content_hint">내용</string>
     <string name="thumbnail_selection_title">사진 선택</string>
+
     <string name="all_save_text">저장</string>
     <string name="all_remove_text">삭제</string>
     <string name="all_text_not_permission">해당 기능을 사용하시려면, 퍼미션 권한이 필요합니다.</string>
@@ -21,9 +22,5 @@
     <string name="all_text_selection_gallery">갤러리 선택</string>
     <string name="all_text_insert_link">링크 삽입</string>
     <string name="all_text_empty_message">메모를 추가하면 여기에 나타납니다.</string>
-    <string-array name="thumbnail_selection_items">
-        <item>카메라</item>
-        <item>갤러리</item>
-        <item>인터넷</item>
-    </string-array>
+    <string name="all_text_insert_link_hint">이미지 주소를 입력해주세요.</string>
 </resources>

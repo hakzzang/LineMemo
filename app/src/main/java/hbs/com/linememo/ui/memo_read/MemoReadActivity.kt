@@ -14,11 +14,8 @@ import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
 import hbs.com.linememo.ui.memo_make.MemoMakeGalleryAdapter
 import hbs.com.linememo.ui.memo_make.MemoMakeViewModel
-import hbs.com.linememo.ui.memo_make.MemoNavigator
-import hbs.com.linememo.util.BottomDialogDelegation
 import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
-import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
@@ -69,9 +66,7 @@ class MemoReadActivity : BaseActivity() {
         memoMakeViewModel.inputMemo(memoItem)
         binding.memoItem = memoMakeViewModel.memoItem.value
         binding.layoutBottomBar.setOnClickListener {
-            ImageSelectionBottomDialog(it.context)
-                .apply{ bottomDialogDelegation = makeBottomDialogDelegation(this) }
-                .show()
+            ImageSelectionBottomDialog(it.context,makeBottomImageSelectionDialogDelegation()).show()
         }
     }
 

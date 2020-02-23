@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ItemMemoAddGalleryBinding
 import hbs.com.linememo.databinding.ItemMemoGalleryBinding
 import hbs.com.linememo.domain.model.MemoGallery
@@ -64,6 +65,7 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
             Glide.with(binding.ivThumbnailItem)
                 .load(item.memoGallery?.filePath)
                 .apply(RequestOptions.centerCropTransform().override(binding.ivThumbnailItem.width, binding.ivThumbnailItem.height))
+                .error(R.drawable.ic_highlight_off_red_24dp)
                 .into(binding.ivThumbnailItem)
         }
     }

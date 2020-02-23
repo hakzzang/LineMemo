@@ -11,15 +11,15 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import hbs.com.linememo.R
-import hbs.com.linememo.util.BottomDialogDelegation
-import hbs.com.linememo.util.ImageSelectionBottomDialog
+import hbs.com.linememo.util.ImageSelectionBottomDialogDelegation
+import hbs.com.linememo.util.ImageLinkBottomDialog
+import hbs.com.linememo.util.ImageLinkBottomDialogDelegation
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
@@ -173,8 +173,8 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun makeBottomDialogDelegation(bottomDialog: BottomSheetDialog): BottomDialogDelegation {
-        return object : BottomDialogDelegation {
+    fun makeBottomImageSelectionDialogDelegation(): ImageSelectionBottomDialogDelegation {
+        return object : ImageSelectionBottomDialogDelegation {
             override fun selectItem(position: Int) {
                 when (position) {
                     0 -> {
@@ -190,10 +190,13 @@ abstract class BaseActivity : AppCompatActivity() {
                         )
                     }
                     2 -> {
-
+                        ImageLinkBottomDialog(this@BaseActivity, object : ImageLinkBottomDialogDelegation{
+                            override fun sendUrl(url: String) {
+                                dataSender.sendImage(url)
+                            }
+                        }).show()
                     }
                 }
-                bottomDialog.dismiss()
             }
         }
     }
