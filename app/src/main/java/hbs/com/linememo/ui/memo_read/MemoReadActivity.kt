@@ -86,7 +86,7 @@ class MemoReadActivity : BaseActivity() {
                 memoMakeViewModel.memoItem.value?.let { memoItem ->
                     memoMakeViewModel.updateMemo(updateCurrentItem(memoItem))
                         .flatMap { memoId ->
-                            if (memoMakeGalleryAdapter.currentList.size > 1) {
+                            if (memoMakeGalleryAdapter.currentList.size > 0) {
                                 memoMakeViewModel.insertMemoGalleries(
                                     memoItem.id.toLong(),
                                     memoMakeGalleryAdapter.currentList

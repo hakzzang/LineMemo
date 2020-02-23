@@ -24,6 +24,7 @@
             android:id="@+id/cb_remove_memo_item"
             android:layout_width="@dimen/check_box_default_size"
             android:layout_height="@dimen/check_box_default_size"
+            android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"

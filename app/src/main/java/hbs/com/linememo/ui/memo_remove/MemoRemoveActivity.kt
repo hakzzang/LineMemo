@@ -1,6 +1,5 @@
 package hbs.com.linememo.ui.memo_remove
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -21,6 +20,7 @@ class MemoRemoveActivity : BaseActivity() {
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoRemoveViewModel: MemoRemoveViewModel
     lateinit var binding: ActivityRemoveMemoBinding
+    lateinit var adapter: MemoRemoveAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerActivityComponent.builder()
@@ -71,16 +71,25 @@ class MemoRemoveActivity : BaseActivity() {
     private fun initViewModel() {
         memoRemoveViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoRemoveViewModel::class.java)
+        memoRemoveViewModel.removeAllCheck.observe(this, Observer {
+            binding.cbAllSelectionItems.isChecked = it
+            if(binding.cbAllSelectionItems.isChecked){
+                memoRemoveViewModel.changeAllCheckState(adapter.currentList)
+                adapter.notifyCurrentItems()
+            }else{
+                memoRemoveViewModel.changeAllRemoveCheckState()
+                adapter.notifyCurrentItems()
+            }
+        })
     }
 
     private fun initView(binding: ActivityRemoveMemoBinding) {
+        adapter = MemoRemoveAdapter(memoRemoveViewModel)
         binding.lifecycleOwner = this
         binding.memoRemoveViewModel = memoRemoveViewModel
-        binding.rvMemoList.adapter =
-            MemoRemoveAdapter(memoRemoveViewModel).also { memoRemoveAdapter ->
+        binding.rvMemoList.adapter = adapter.also { memoRemoveAdapter ->
                 compositeDisposable.add(memoRemoveViewModel.findAllMemo().subscribe {
-                    val sortedList = it.sortedByDescending { it.makeAt.time }
-                    memoRemoveAdapter.submitList(sortedList)
+                    adapter.addAllItems(it)
                 })
             }
         binding.rvMemoList.layoutManager = LinearLayoutManager(this)
