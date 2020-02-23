@@ -52,14 +52,14 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong()
+        return getItem(position).memoGallery?.id?.toLong()?:hashCode().toLong()
     }
 
     inner class MemoGalleryViewHolder(val binding: ItemMemoGalleryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WrapMemoGallery, position: Int) {
             binding.ivThumbnailRemove.setOnClickListener {
-                removeItem(position)
+                removeItem(item.memoGallery?.id)
             }
 
             Glide.with(binding.ivThumbnailItem)
@@ -100,21 +100,27 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
         submitList(newList)
     }
 
-    fun removeItem(position: Int){
+    fun removeItem(galleryId: Int?){
+        val galleryId = galleryId?:return
         val oldList = currentList
         val newList = mutableListOf<WrapMemoGallery>()
         newList.addAll(oldList)
-        newList.removeAt(position)
-        submitList(newList)
+        newList.forEachIndexed { index, wrapMemoGallery ->
+            if(wrapMemoGallery.memoGallery?.id == galleryId){
+                newList.remove(wrapMemoGallery)
+                submitList(newList)
+                return
+            }
+        }
     }
 }
 
 val memoGalleryListAsyncListUtil = object : DiffUtil.ItemCallback<WrapMemoGallery>() {
     override fun areItemsTheSame(oldItem: WrapMemoGallery, newItem: WrapMemoGallery): Boolean {
-        return oldItem.memoGallery?.id == newItem.memoGallery?.id
+        return oldItem.memoGallery == newItem.memoGallery
     }
 
     override fun areContentsTheSame(oldItem: WrapMemoGallery, newItem: WrapMemoGallery): Boolean {
-        return oldItem.memoGallery == newItem.memoGallery
+        return oldItem.memoGallery?.id == newItem.memoGallery?.id
     }
 }

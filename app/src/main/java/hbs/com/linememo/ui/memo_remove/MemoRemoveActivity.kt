@@ -34,7 +34,7 @@ class MemoRemoveActivity : BaseActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_remove_memo)
 
-        initToolbar(binding.toolbar, "메모 삭제", true)
+        initToolbar(binding.toolbar, getString(R.string.all_text_memo_remove_title), true)
         initViewModel()
         initView(binding)
 

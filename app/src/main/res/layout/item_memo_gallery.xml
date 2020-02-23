@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/iv_thumbnail_remove"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/thumbnail_remove_icon_size"
+            android:layout_height="@dimen/thumbnail_remove_icon_size"
             android:background="@drawable/ic_white_color_circle"
             android:src="@drawable/ic_remove_circle_red_24dp"
             app:layout_constraintHorizontal_bias="0.95"

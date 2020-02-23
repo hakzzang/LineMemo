@@ -39,7 +39,7 @@ class MemoMakeActivity : BaseActivity() {
                 this,
                 R.layout.activity_make_memo
             )
-        initToolbar(binding.toolbar, "메모 등록", true)
+        initToolbar(binding.toolbar, getString(R.string.all_text_memo_insert_title), true)
         initViewModel()
         initView(binding)
 

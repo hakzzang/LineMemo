@@ -38,7 +38,7 @@ class MemoReadActivity : BaseActivity() {
             this,
             R.layout.activity_read_memo
         )
-        initToolbar(binding.toolbar, "메모 수정", true)
+        initToolbar(binding.toolbar, getString(R.string.all_text_memo_read_title), true)
         initViewModel()
         initView(binding)
 

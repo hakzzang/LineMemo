@@ -40,7 +40,7 @@ class MemoActivity : BaseActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        initToolbar(binding.toolbar, "메모 리스트")
+        initToolbar(binding.toolbar, getString(R.string.all_text_memo_list_title))
         initViewModel()
         initView(binding)
         findAndNotifyAllMemo()

@@ -19,4 +19,7 @@
     <dimen name="link_image_bottom_dialog_height">96dp</dimen>
     <dimen name="link_image_button_width">96dp</dimen>
     <dimen name="padding_dialog_link_image_side">12dp</dimen>
+    <dimen name="layout_bottom_bar_height">48dp</dimen>
+    <dimen name="layout_bottom_bar_margin">12dp</dimen>
+    <dimen name="thumbnail_remove_icon_size">24dp</dimen>
 </resources>
