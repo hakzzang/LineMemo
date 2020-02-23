@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,7 @@ class MemoActivity : BaseActivity() {
             .inject(this)
 
 
-        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         initToolbar(binding.toolbar, "메모 리스트")
         initViewModel()
@@ -79,6 +80,11 @@ class MemoActivity : BaseActivity() {
     private fun findAndNotifyAllMemo(){
         compositeDisposable.add(
             memoViewModel.findAllMemo().subscribe {
+                binding.clEmptyContainer.visibility = if(it.size == 0){
+                    View.VISIBLE
+                }else{
+                    View.GONE
+                }
                 memoListAdapter.addItems(it, Runnable {
                     binding.rvMemoList.smoothScrollToPosition(0)
                 })
