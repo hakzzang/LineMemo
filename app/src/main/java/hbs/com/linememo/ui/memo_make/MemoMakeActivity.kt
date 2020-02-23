@@ -1,5 +1,6 @@
 package hbs.com.linememo.ui.memo_make
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import hbs.com.linememo.R
 import hbs.com.linememo.databinding.ActivityMakeMemoBinding
 import hbs.com.linememo.di.*
+import hbs.com.linememo.domain.model.WrapMemoGallery
 import hbs.com.linememo.ui.core.BaseActivity
 import hbs.com.linememo.ui.core.DataSender
+import hbs.com.linememo.ui.gallery.GalleryActivity
 import hbs.com.linememo.util.ImageSelectionBottomDialog
 import hbs.com.linememo.util.ResourceKeys
 import io.reactivex.Observable
@@ -53,6 +56,14 @@ class MemoMakeActivity : BaseActivity() {
     private fun initViewModel() {
         memoMakeViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MemoMakeViewModel::class.java)
+        memoMakeViewModel.showThumbnail.observe(this, androidx.lifecycle.Observer { galleries ->
+            Intent(this, GalleryActivity::class.java).apply {
+                val galleryArrayList = arrayListOf<WrapMemoGallery>()
+                galleryArrayList.addAll(galleries)
+                putParcelableArrayListExtra(ResourceKeys.GALLERY_ITEM_KEY, galleryArrayList)
+                startActivity(this)
+            }
+        })
     }
 
     private fun initView(binding: ActivityMakeMemoBinding) {

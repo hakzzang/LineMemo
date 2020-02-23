@@ -61,6 +61,9 @@ class MemoMakeGalleryAdapter (private val memoMakeViewModel: MemoMakeViewModel):
             binding.ivThumbnailRemove.setOnClickListener {
                 removeItem(item.memoGallery?.id)
             }
+            binding.ivThumbnailItem.setOnClickListener {
+                item.memoGallery?.filePath?.let { filePath -> memoMakeViewModel.showThumbnail(currentList) }
+            }
 
             Glide.with(binding.ivThumbnailItem)
                 .load(item.memoGallery?.filePath)

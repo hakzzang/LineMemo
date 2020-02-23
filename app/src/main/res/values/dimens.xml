@@ -25,4 +25,9 @@
     <dimen name="item_memo_side_margin">16dp</dimen>
     <dimen name="memo_thumbnail_icon_size">36dp</dimen>
     <dimen name="memo_content_margin_side">12dp</dimen>
+    <dimen name="gallery_chip_top_margin">16dp</dimen>
+    <dimen name="gallery_chip_width">86dp</dimen>
+    <dimen name="gallery_chip_height">32dp</dimen>
+    <dimen name="gallery_exit_button_size">48dp</dimen>
+    <dimen name="gallery_exit_button_margin">8dp</dimen>
 </resources>

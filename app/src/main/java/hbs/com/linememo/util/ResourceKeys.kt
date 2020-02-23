@@ -10,6 +10,7 @@ object ResourceKeys {
     const val COMPLETED = 200
 
     const val MEMO_ITEM_KEY ="MemoItem"
+    const val GALLERY_ITEM_KEY = "GALLERY"
 
     //permission
     const val CAMERA_PERMISSION_CODE = 101
