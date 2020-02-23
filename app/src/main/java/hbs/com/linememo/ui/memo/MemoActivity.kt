@@ -2,7 +2,6 @@ package hbs.com.linememo.ui.memo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,14 +16,13 @@ import hbs.com.linememo.ui.memo_make.MemoMakeActivity
 import hbs.com.linememo.ui.memo_make.MemoNavigator
 import hbs.com.linememo.ui.memo_remove.MemoRemoveActivity
 import hbs.com.linememo.util.ResourceKeys
-import io.reactivex.Observable
 import javax.inject.Inject
 
 class MemoActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     lateinit var memoViewModel: MemoViewModel
-    lateinit var memoListAdapter : MemoListAdapter
+    lateinit var memoListAdapter: MemoListAdapter
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +45,9 @@ class MemoActivity : BaseActivity() {
     }
 
     private fun initViewModel() {
-        memoViewModel = ViewModelProvider(viewModelStore, viewModelFactory).get(MemoViewModel::class.java)
-        memoViewModel.navigator = object : MemoNavigator{
+        memoViewModel =
+            ViewModelProvider(viewModelStore, viewModelFactory).get(MemoViewModel::class.java)
+        memoViewModel.navigator = object : MemoNavigator {
             override fun callingIntent(intent: Intent) {
                 startActivityForResult(intent, ResourceKeys.UPDATE_MEMO)
             }
@@ -66,6 +65,11 @@ class MemoActivity : BaseActivity() {
                 ResourceKeys.MAKE_MEMO
             )
         }
+
+        binding.splMemoList.setOnRefreshListener {
+            binding.splMemoList.isRefreshing = true
+            findAndNotifyAllMemo()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,18 +81,21 @@ class MemoActivity : BaseActivity() {
         }
     }
 
-    private fun findAndNotifyAllMemo(){
+    private fun findAndNotifyAllMemo() {
         compositeDisposable.add(
             memoViewModel.findAllMemo().subscribe {
-                binding.clEmptyContainer.visibility = if(it.size == 0){
+                binding.clEmptyContainer.visibility = if (it.size == 0) {
                     View.VISIBLE
-                }else{
+                } else {
                     View.GONE
                 }
                 memoListAdapter.addItems(it, Runnable {
                     binding.rvMemoList.smoothScrollToPosition(0)
                 })
             })
+        if(binding.splMemoList.isRefreshing){
+            binding.splMemoList.isRefreshing = false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
